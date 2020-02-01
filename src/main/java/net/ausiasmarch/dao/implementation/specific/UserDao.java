@@ -11,13 +11,14 @@ import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.dao.interfaces.specific.UserDaoJpaInterface;
 
 @Repository
+@Qualifier("UserDao")
 public class UserDao extends GenericDaoImplementation implements GenericDaoInterface {
 
     @Autowired
     protected UserDaoJpaInterface oUserRepository;
 
     @Autowired
-    public UserDao(UserDaoJpaInterface oUserRepository) {
+    public UserDao(@Qualifier("UserDaoJpaInterface")UserDaoJpaInterface oUserRepository) {
         super(oUserRepository);
     }
 

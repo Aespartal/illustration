@@ -9,10 +9,11 @@ import org.springframework.stereotype.Repository;
 import net.ausiasmarch.dao.interfaces.specific.RoleDaoJpaInterface;
 
 @Repository
+@Qualifier("RoleDao")
 public class RoleDao extends GenericDaoImplementation implements GenericDaoInterface {
 
     @Autowired
-    public RoleDao(RoleDaoJpaInterface oRoleRepository) {
+    public RoleDao(@Qualifier("RoleDaoJpaInterface")RoleDaoJpaInterface oRoleRepository) {
         super(oRoleRepository);
     }
 
