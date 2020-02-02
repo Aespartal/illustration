@@ -10,5 +10,5 @@ package net.ausiasmarch.service.interfaces.specific;
  * @author espar
  */
 public interface RoleServiceInterface {
-    
+
 }

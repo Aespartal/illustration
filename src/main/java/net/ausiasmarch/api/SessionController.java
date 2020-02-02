@@ -1,4 +1,4 @@
-package net.ausiasmarch.constroller;
+package net.ausiasmarch.api;
 
 import java.util.Map;
 
@@ -25,28 +25,27 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @RequestMapping("/session")
 public class SessionController {
 
-    @Autowired
-    HttpSession oSession;
+	@Autowired
+	HttpSession oSession;
 
-    @Autowired
-    @Qualifier("UserService")
-    UserService oUserService;
+	@Autowired
+	UserService oUserService;
 
-    @GetMapping("/") // check
-    public ResponseEntity<UserEntity> check() {
-        UserEntity oUserEntity = (UserEntity) oSession.getAttribute("usuario");
-        return new ResponseEntity<>(oUserEntity, HttpStatus.OK);
-    }
+	@GetMapping("/") // check
+	public ResponseEntity<UserEntity> check() {
+		UserEntity oUserEntity = (UserEntity) oSession.getAttribute("usuario");
+		return new ResponseEntity<>(oUserEntity, HttpStatus.OK);
+	}
 
-    @DeleteMapping("/") // logout
-    public ResponseEntity<Boolean> logout(@PathVariable(value = "id") int id) {
-        oSession.invalidate();
-        return new ResponseEntity<>(true, HttpStatus.OK);
-    }
+	@DeleteMapping("/") // logout
+	public ResponseEntity<Boolean> logout(@PathVariable(value = "id") int id) {
+		oSession.invalidate();
+		return new ResponseEntity<>(true, HttpStatus.OK);
+	}
 
-    @PostMapping("/") // login
-    public ResponseEntity<UserEntity> login(@RequestParam Map<String, String> mParametros) {
-        return new ResponseEntity<>(oUserService.login(mParametros), HttpStatus.OK);
-    }
+	@PostMapping("/") // login
+	public ResponseEntity<UserEntity> login(@RequestParam Map<String, String> mParametros) {
+		return new ResponseEntity<>(oUserService.login(mParametros), HttpStatus.OK);
+	}
 
 }

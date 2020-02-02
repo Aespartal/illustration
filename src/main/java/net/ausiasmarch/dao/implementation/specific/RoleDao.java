@@ -7,14 +7,18 @@ import net.ausiasmarch.dao.interfaces.generic.GenericDaoInterface;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import net.ausiasmarch.dao.interfaces.specific.RoleDaoJpaInterface;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-@Qualifier("RoleDao")
+@Qualifier("roledao")
 public class RoleDao extends GenericDaoImplementation implements GenericDaoInterface {
 
-    @Autowired
-    public RoleDao(@Qualifier("RoleDaoJpaInterface")RoleDaoJpaInterface oRoleRepository) {
-        super(oRoleRepository);
-    }
+	protected RoleDaoJpaInterface oRoleRepository;
+
+	@Autowired
+	public RoleDao(RoleDaoJpaInterface oRoleRepository) {
+		super(oRoleRepository);
+	}
 
 }

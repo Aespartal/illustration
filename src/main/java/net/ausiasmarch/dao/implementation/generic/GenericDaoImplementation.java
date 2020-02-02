@@ -11,54 +11,53 @@ import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Repository
-public abstract class GenericDaoImplementation<T extends GenericEntityInterface> implements GenericDaoInterface<GenericEntityInterface> {
+public abstract class GenericDaoImplementation<T extends GenericEntityInterface>
+		implements GenericDaoInterface<GenericEntityInterface> {
 
-    @Autowired
-    protected JpaRepository oJpaRepository;
+	protected JpaRepository oJpaRepository;
 
-    @Autowired
-    public GenericDaoImplementation(JpaRepository oJpaRepository) {
-        this.oJpaRepository = oJpaRepository;
-    }
+	public GenericDaoImplementation(JpaRepository<GenericEntityInterface, Integer> oJpaRepository) {
+		this.oJpaRepository = oJpaRepository;
+	}
 
-    @Override
-    public GenericEntityInterface get(int id) {
-        return (GenericEntityInterface) oJpaRepository.getOne(id);
-    }
+	@Override
+	public GenericEntityInterface get(int id) {
+		return (GenericEntityInterface) oJpaRepository.getOne(id);
+	}
 
-    @Override
-    public List<GenericEntityInterface> getall() {
-        return oJpaRepository.findAll();
-    }
+	@Override
+	public List<GenericEntityInterface> getall() {
+		return oJpaRepository.findAll();
+	}
 
-    @Override
-    public Long count() {
-        return oJpaRepository.count();
-    }
+	@Override
+	public Long count() {
+		return oJpaRepository.count();
+	}
 
-    @Override
-    public Page<GenericEntityInterface> getPage(Pageable oPageable) {
-        return oJpaRepository.findAll(oPageable);
-    }
+	@Override
+	public Page<GenericEntityInterface> getPage(Pageable oPageable) {
+		return oJpaRepository.findAll(oPageable);
+	}
 
-    @Override
-    public Boolean delete(int id) {
-        oJpaRepository.deleteById(id);
-        return !oJpaRepository.existsById(id);
-    }
+	@Override
+	public Boolean delete(int id) {
+		oJpaRepository.deleteById(id);
+		return !oJpaRepository.existsById(id);
+	}
 
-    @Override
-    public GenericEntityInterface create(GenericEntityInterface oBean) {
-        return (GenericEntityInterface) oJpaRepository.save(oBean);
-    }
+	@Override
+	public GenericEntityInterface create(GenericEntityInterface oBean) {
+		return (GenericEntityInterface) oJpaRepository.save(oBean);
+	}
 
-    @Override
-    public GenericEntityInterface update(GenericEntityInterface oBean) {
-        if (oJpaRepository.existsById(oBean.getId())) {
-            return (GenericEntityInterface) oJpaRepository.save(oBean);
-        } else {
-            return null; // throw new Exception("mensaje")
-        }
-    }
+	@Override
+	public GenericEntityInterface update(GenericEntityInterface oBean) {
+		if (oJpaRepository.existsById(oBean.getId())) {
+			return (GenericEntityInterface) oJpaRepository.save(oBean);
+		} else {
+			return null; // throw new Exception("mensaje")
+		}
+	}
 
 }

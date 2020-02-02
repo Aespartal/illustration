@@ -23,61 +23,61 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity
 @Table(name = "role")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class RoleEntity implements Serializable, GenericEntityInterface {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id") // si tiene el mismo nombre no cale
-    private Integer id;
-    private String description;
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id") // si tiene el mismo nombre no cale
+	private Integer id;
+	private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "role_id", cascade = {CascadeType.ALL})
-    private List<UserEntity> users;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role_id", cascade = { CascadeType.ALL })
+	private List<UserEntity> users;
 
-    public RoleEntity() {
+	public RoleEntity() {
 
-    }
+	}
 
-    public RoleEntity(Integer id, String description) {
-        this.id = id;
-        this.description = description;
-    }
+	public RoleEntity(Integer id, String description) {
+		this.id = id;
+		this.description = description;
+	}
 
-    public RoleEntity(String description) {
-        this.description = description;
-    }
+	public RoleEntity(String description) {
+		this.description = description;
+	}
 
-    @Override
-    public Integer getId() {
-        return id;
-    }
+	@Override
+	public Integer getId() {
+		return id;
+	}
 
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	@Override
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public List<UserEntity> getUsers() {
-        return users;
-    }
+	public List<UserEntity> getUsers() {
+		return users;
+	}
 
-    public void setUsers(List<UserEntity> users) {
-        this.users = users;
-    }
+	public void setUsers(List<UserEntity> users) {
+		this.users = users;
+	}
 
-    @Override
-    public String toString() {
-        return "RoleEntity [id=" + id + ", description=" + description + "]";
-    }
+	@Override
+	public String toString() {
+		return "RoleEntity [id=" + id + ", description=" + description + "]";
+	}
 
 }

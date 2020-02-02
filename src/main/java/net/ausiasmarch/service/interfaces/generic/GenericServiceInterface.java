@@ -10,9 +10,8 @@ import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-
 public interface GenericServiceInterface<T extends GenericEntityInterface> {
-    	T get(int id);
+	T get(int id);
 
 	List<T> getall();
 
