@@ -9,8 +9,6 @@ import net.ausiasmarch.service.interfaces.generic.GenericServiceInterface;
 @Service
 public class RoleService extends GenericServiceImplementation implements GenericServiceInterface {
 
-	protected RoleDao oRoleDao;
-
 	@Autowired
 	public RoleService(RoleDao oRoleDao) {
 		super(oRoleDao);

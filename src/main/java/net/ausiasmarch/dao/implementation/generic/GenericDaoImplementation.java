@@ -14,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class GenericDaoImplementation<T extends GenericEntityInterface>
 		implements GenericDaoInterface<GenericEntityInterface> {
 
-	protected JpaRepository oJpaRepository;
+	protected JpaRepository<GenericEntityInterface, Integer> oJpaRepository;
 
-	public GenericDaoImplementation(JpaRepository<GenericEntityInterface, Integer> oJpaRepository) {
+	public GenericDaoImplementation(JpaRepository oJpaRepository) {
 		this.oJpaRepository = oJpaRepository;
 	}
 

@@ -1,5 +1,6 @@
 package net.ausiasmarch.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import java.io.Serializable;
 
@@ -55,7 +56,7 @@ public class UserEntity implements Serializable, GenericEntityInterface {
 	private Boolean is_reported;
 	@ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "role_id")
-	private RoleEntity role_id;
+	private RoleEntity role;
 
 	public UserEntity() {
 	}
@@ -188,20 +189,12 @@ public class UserEntity implements Serializable, GenericEntityInterface {
 	}
 
 	public RoleEntity getRole_id() {
-		return role_id;
+		return role;
 	}
 
 	public void setRole_id(RoleEntity role_id) {
-		this.role_id = role_id;
+		this.role = role_id;
 	}
 
-	@Override
-	public String toString() {
-		return "UserEntity{" + "id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", is_private=" + is_private + ", description=" + description + ", date_register=" + date_register
-				+ ", img_profile=" + img_profile + ", img_cover=" + img_cover + ", token=" + token + ", level=" + level
-				+ ", exp=" + exp + ", is_validate=" + is_validate + ", is_banned=" + is_banned + ", is_reported="
-				+ is_reported + ", role_id=" + role_id + '}';
-	}
 
 }

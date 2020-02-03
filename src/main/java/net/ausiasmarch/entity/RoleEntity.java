@@ -1,5 +1,6 @@
 package net.ausiasmarch.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,8 +34,9 @@ public class RoleEntity implements Serializable, GenericEntityInterface {
 	private Integer id;
 	private String description;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role_id", cascade = { CascadeType.ALL })
-	private List<UserEntity> users;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role", cascade = { CascadeType.ALL })
+        @JsonIgnore
+	private List<UserEntity> users = new ArrayList<>();
 
 	public RoleEntity() {
 
@@ -75,9 +77,5 @@ public class RoleEntity implements Serializable, GenericEntityInterface {
 		this.users = users;
 	}
 
-	@Override
-	public String toString() {
-		return "RoleEntity [id=" + id + ", description=" + description + "]";
-	}
 
 }

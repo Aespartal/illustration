@@ -7,6 +7,7 @@ package net.ausiasmarch.service.implementation.generic;
 
 import java.util.List;
 import net.ausiasmarch.dao.implementation.generic.GenericDaoImplementation;
+import net.ausiasmarch.dao.interfaces.generic.GenericDaoInterface;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import net.ausiasmarch.service.interfaces.generic.GenericServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,47 +19,45 @@ import org.springframework.stereotype.Service;
 public abstract class GenericServiceImplementation<T extends GenericEntityInterface>
 		implements GenericServiceInterface<GenericEntityInterface> {
 
-	@Autowired
-	protected GenericDaoImplementation<?> oGenericDaoImplementation;
+	protected GenericDaoInterface<GenericEntityInterface> oDao;
 
-	@Autowired
-	public GenericServiceImplementation(GenericDaoImplementation<?> oGenericDaoImplementation) {
-		this.oGenericDaoImplementation = oGenericDaoImplementation;
+	public GenericServiceImplementation(GenericDaoImplementation<GenericEntityInterface> oDao) {
+		this.oDao = oDao;
 	}
 
 	@Override
 	public GenericEntityInterface get(int id) {
-		return (GenericEntityInterface) oGenericDaoImplementation.get(id);
+		return (GenericEntityInterface) oDao.get(id);
 	}
 
 	@Override
 	public List<GenericEntityInterface> getall() {
-		return oGenericDaoImplementation.getall();
+		return oDao.getall();
 	}
 
 	@Override
 	public Long count() {
-		return oGenericDaoImplementation.count();
+		return oDao.count();
 	}
 
 	@Override
 	public Page<GenericEntityInterface> getPage(Pageable oPageable) {
-		return oGenericDaoImplementation.getPage(oPageable);
+		return oDao.getPage(oPageable);
 	}
 
 	@Override
 	public Boolean delete(int id) {
-		return oGenericDaoImplementation.delete(id);
+		return oDao.delete(id);
 	}
 
 	@Override
 	public GenericEntityInterface create(GenericEntityInterface oEntity) {
-		return (GenericEntityInterface) oGenericDaoImplementation.create(oEntity);
+		return (GenericEntityInterface) oDao.create(oEntity);
 	}
 
 	@Override
 	public GenericEntityInterface update(GenericEntityInterface oEntity) {
-		return (GenericEntityInterface) oGenericDaoImplementation.update(oEntity);
+		return (GenericEntityInterface) oDao.update(oEntity);
 	}
 
 }

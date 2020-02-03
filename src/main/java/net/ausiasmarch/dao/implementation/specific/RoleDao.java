@@ -7,12 +7,11 @@ import net.ausiasmarch.dao.interfaces.generic.GenericDaoInterface;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import net.ausiasmarch.dao.interfaces.specific.RoleDaoJpaInterface;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.JpaRepository;
+import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 
 @Repository
-@Qualifier("roledao")
-public class RoleDao extends GenericDaoImplementation implements GenericDaoInterface {
+@Qualifier("RoleDao")
+public class RoleDao extends GenericDaoImplementation<GenericEntityInterface> implements GenericDaoInterface<GenericEntityInterface> {
 
 	protected RoleDaoJpaInterface oRoleRepository;
 
