@@ -33,7 +33,7 @@ public class SessionController {
 
 	@GetMapping("/") // check
 	public ResponseEntity<UserEntity> check() {
-		UserEntity oUserEntity = (UserEntity) oSession.getAttribute("usuario");
+		UserEntity oUserEntity = (UserEntity) oSession.getAttribute("username");
 		return new ResponseEntity<>(oUserEntity, HttpStatus.OK);
 	}
 
@@ -45,7 +45,9 @@ public class SessionController {
 
 	@PostMapping("/") // login
 	public ResponseEntity<UserEntity> login(@RequestParam Map<String, String> mParametros) {
-		return new ResponseEntity<>(oUserService.login(mParametros), HttpStatus.OK);
+            oSession.setAttribute("username", oUserService.login(mParametros));
+		return new ResponseEntity<UserEntity>((UserEntity) oSession.getAttribute("username"), HttpStatus.OK);
 	}
+
 
 }

@@ -12,23 +12,18 @@ import net.ausiasmarch.dao.interfaces.specific.UserDaoJpaInterface;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 
 @Repository
-@Qualifier("UserDao")
 public class UserDao extends GenericDaoImplementation<GenericEntityInterface> implements GenericDaoInterface<GenericEntityInterface> {
+    
+    @Autowired
+    protected UserDaoJpaInterface oUserRepository;
 
-	protected UserDaoJpaInterface oUserRepository;
+    @Autowired
+    public UserDao(UserDaoJpaInterface oUserRepository) {
+        super(oUserRepository);
+    }
 
-	@Autowired
-	public UserDao(UserDaoJpaInterface oUserRepository) {
-		super(oUserRepository);
-	}
-
-	public UserEntity login(UserEntity oUserEntity) {
-            System.out.print("Ha pasado por aqui");
-            UserEntity oUserEntity2 = oUserRepository.findByLogin(oUserEntity.getUsername(),
-                    oUserEntity.getPassword());
-            
-		return oUserEntity2;
-                
-	}
+    public UserEntity login(String login, String password) {
+        return oUserRepository.findByLogin(login, password);
+    }
 
 }

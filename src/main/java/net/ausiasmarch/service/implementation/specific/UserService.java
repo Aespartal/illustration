@@ -12,7 +12,7 @@ import net.ausiasmarch.service.interfaces.generic.GenericServiceInterface;
 
 @Service
 public class UserService extends GenericServiceImplementation implements GenericServiceInterface {
-
+        @Autowired
         protected UserDao oUserDao;
         
 	@Autowired
@@ -20,11 +20,9 @@ public class UserService extends GenericServiceImplementation implements Generic
 		super(oUserDao);
 	}
 
-	public UserEntity login(Map<String, String> mParametros) {
-		UserEntity oUserEntity = new UserEntity();
-		oUserEntity.setUsername(mParametros.get("username"));
-		oUserEntity.setPassword(mParametros.get("password"));
-                System.err.println(oUserEntity.getUsername());
-		return oUserDao.login(oUserEntity);
+        
+        public UserEntity login(Map<String, String> mParametros) {
+		return oUserDao.login(mParametros.get("username"), mParametros.get("password"));
 	}
+
 }

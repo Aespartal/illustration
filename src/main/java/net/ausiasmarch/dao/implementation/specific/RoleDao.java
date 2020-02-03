@@ -10,9 +10,8 @@ import net.ausiasmarch.dao.interfaces.specific.RoleDaoJpaInterface;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 
 @Repository
-@Qualifier("RoleDao")
 public class RoleDao extends GenericDaoImplementation<GenericEntityInterface> implements GenericDaoInterface<GenericEntityInterface> {
-
+        @Autowired
 	protected RoleDaoJpaInterface oRoleRepository;
 
 	@Autowired
