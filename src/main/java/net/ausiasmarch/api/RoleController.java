@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
-import net.ausiasmarch.entity.RoleEntity;
+import net.ausiasmarch.entity.RolEntity;
 import net.ausiasmarch.service.implementation.specific.RoleService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials= "true")
 @RestController
 @RequestMapping("/role")
 public class RoleController {
@@ -31,12 +31,12 @@ public class RoleController {
 	RoleService oRoleService;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<RoleEntity> get(@PathVariable(value = "id") int id) {
-		return new ResponseEntity<>((RoleEntity) oRoleService.get(id), HttpStatus.OK);
+	public ResponseEntity<RolEntity> get(@PathVariable(value = "id") int id) {
+		return new ResponseEntity<>((RolEntity) oRoleService.get(id), HttpStatus.OK);
 	}
 
 	@GetMapping("/getall")
-	public ResponseEntity<List<RoleEntity>> get() {
+	public ResponseEntity<List<RolEntity>> get() {
 		return new ResponseEntity<>(oRoleService.getall(), HttpStatus.OK);
 	}
 
@@ -46,7 +46,7 @@ public class RoleController {
 	}
 
 	@GetMapping("/getpage/{page}/{rpp}")
-	public ResponseEntity<Page<RoleEntity>> getPage(@PathVariable(value = "page") int page,
+	public ResponseEntity<Page<RolEntity>> getPage(@PathVariable(value = "page") int page,
 			@PathVariable(value = "rpp") int rpp) {
 		Pageable oPageable;
 		oPageable = PageRequest.of(page, rpp);
@@ -59,13 +59,13 @@ public class RoleController {
 	}
 
 	@PostMapping("/") // @RequestParam para uso parametro a parametro
-	public ResponseEntity<RoleEntity> create(@RequestBody GenericEntityInterface oRoleEntity) {
-		return new ResponseEntity<>((RoleEntity) oRoleService.create(oRoleEntity), HttpStatus.OK);
+	public ResponseEntity<RolEntity> create(@RequestBody GenericEntityInterface oRoleEntity) {
+		return new ResponseEntity<>((RolEntity) oRoleService.create(oRoleEntity), HttpStatus.OK);
 	}
 
 	@PutMapping("/") // @RequestParam para uso parametro a parametro
-	public ResponseEntity<RoleEntity> update(@RequestBody GenericEntityInterface oRoleEntity) {
-		return new ResponseEntity<>((RoleEntity) oRoleService.update(oRoleEntity), HttpStatus.OK);
+	public ResponseEntity<RolEntity> update(@RequestBody GenericEntityInterface oRoleEntity) {
+		return new ResponseEntity<>((RolEntity) oRoleService.update(oRoleEntity), HttpStatus.OK);
 	}
 
 }

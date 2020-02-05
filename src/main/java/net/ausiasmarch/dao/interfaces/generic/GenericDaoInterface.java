@@ -19,8 +19,8 @@ public interface GenericDaoInterface<T extends GenericEntityInterface> {
 
 	Boolean delete(int id);
 
-	T create(T oTipousuarioBean);
+	T create(T oBean);
 
-	T update(T oTipousuarioBean);
+	T update(T oBean);
 
 }

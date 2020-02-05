@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.persistence.Entity;
 
 /**
  *
@@ -25,29 +24,28 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "role")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class RoleEntity implements Serializable, GenericEntityInterface {
+public class RolEntity implements Serializable, GenericEntityInterface {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id") // si tiene el mismo nombre no cale
 	private Integer id;
 	private String description;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role", cascade = { CascadeType.ALL })
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role", cascade = { CascadeType.ALL }, orphanRemoval = true)
         @JsonIgnore
 	private List<UserEntity> users = new ArrayList<>();
 
-	public RoleEntity() {
+	public RolEntity() {
 
 	}
 
-	public RoleEntity(Integer id, String description) {
+	public RolEntity(Integer id, String description) {
 		this.id = id;
 		this.description = description;
 	}
 
-	public RoleEntity(String description) {
+	public RolEntity(String description) {
 		this.description = description;
 	}
 
