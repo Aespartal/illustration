@@ -27,10 +27,12 @@ public class CommentEntity implements Serializable, GenericEntityInterface {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private ImageEntity image;
     private String body;
+    
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date date;
 

@@ -22,20 +22,25 @@ public class ImageDao extends GenericDaoImplementation<GenericEntityInterface> i
 	public ImageDao(ImageDaoJpaInterface oImageRepository) {
 		super(oImageRepository);
 	}
-        
-        public Boolean existLike(Integer user_id, Integer image_id){
-            boolean state;
-            
-            if(!oImageRepository.existLike(user_id, image_id).isEmpty()){
-                oImageRepository.removetLike(user_id, image_id);
-                System.out.print("Ha quitado el like");
-                state = true;
-            } else {
-                oImageRepository.saveLike(user_id, image_id);
-                System.out.print("Ha dado a like");
-                state = false;
-            }       
-            return state;
+   
+        //------------------------------
+        public Boolean findlike(Integer user_id, Integer image_id){
+            if(!oImageRepository.findlike(user_id,image_id).isEmpty()){
+                return true;
+            }
+            return false;
         }
-        
+        public Boolean removelike(Integer user_id, Integer image_id){
+             if(oImageRepository.removeLike(user_id,image_id)){
+                return true;
+            }
+            return false;
+        }
+         public Boolean saveLike(Integer user_id, Integer image_id){
+            if(oImageRepository.saveLike(user_id,image_id)){
+                return true;
+            }
+            return false;
+        }
+        //------------------------------
 }

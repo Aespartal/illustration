@@ -49,13 +49,13 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
-    
+    //------------------------------------
     @ManyToMany(
             mappedBy = "image",
             cascade = {CascadeType.ALL})
     @JsonIgnore
-    private List<ImageEntity> likes = new ArrayList<>();
-    
+    private List<ImageEntity> likes = new ArrayList<>(); //MANY TO MENY con ImageEntity
+    //-----------------------------------
     @OneToMany(
         mappedBy = "image",
         cascade = CascadeType.ALL,

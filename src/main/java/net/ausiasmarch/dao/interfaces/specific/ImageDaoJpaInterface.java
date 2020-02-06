@@ -15,12 +15,16 @@ import org.springframework.data.repository.query.Param;
  * @author espar
  */
 public interface ImageDaoJpaInterface extends JpaRepository<ImageEntity, String> {
-    @Query("SELECT i.id FROM ImageEntity i inner join like_image l on l.image_id=i.id WHERE l.user_id=:user_id AND i.image_id=:image_id")
-    List<String> existLike(@Param("user_id")Integer user_id,@Param("image_id")Integer image_id);
+    //BUSCA EN LA TABLA LIKE_IMAGE SI HA DADO LIKE
+    @Query(value="SELECT i FROM like_image i WHERE user_id=:user_id AND image_id=:image_id",nativeQuery=true)
+    List<String> findlike(@Param("user_id")Integer user_id,@Param("image_id")Integer image_id);
     
-    @Query("DELETE FROM ImageEntity i inner join like_image l on l.image_id=i.id WHERE l.user_id=:user_id AND i.image_id=:image_id")
-    void removetLike(@Param("user_id")Integer user_id,@Param("image_id")Integer image_id);
+     //ELIMINA EL LIKE DE LA TABLA
+    @Query(value="DELETE FROM like_image i WHERE user_id=:user_id AND image_id=:image_id",nativeQuery=true)
+    boolean removeLike(@Param("user_id")Integer user_id,@Param("image_id")Integer image_id);
     
-    @Query("INSERT INTO like_image (user_id, image_id) VALUES (:user_id, :image_id)")
-    void saveLike(@Param("user_id")Integer user_id,@Param("image_id")Integer image_id);
+    //GUARDA EL LIKE EN LA TABLA
+    @Query(value="INSERT INTO like_image (user_id, image_id) VALUES (:user_id, :image_id)",nativeQuery=true)
+    boolean saveLike(@Param("user_id")Integer user_id,@Param("image_id")Integer image_id);
+    
 }

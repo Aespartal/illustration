@@ -77,7 +77,7 @@ public class ImageController {
     }
 
     @PostMapping("/like") // login
-    public ResponseEntity<Boolean> login(@RequestParam Map<Integer, Integer> mParametros) {
+    public ResponseEntity<Boolean> like(@RequestParam Map<Integer, Integer> mParametros) {
         return new ResponseEntity<>(oImageService.like(mParametros), HttpStatus.OK);
     }
 

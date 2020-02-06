@@ -66,15 +66,15 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.ALL})
     @JsonIgnore
     private List<AlbumEntity> albums = new ArrayList<>();
-
+//-----------------------
     @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(
             name = "like_image",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
     @JsonIgnore
-    private List<ImageEntity> likedImage = new ArrayList<>();
-
+    private List<UserEntity> likedImage = new ArrayList<>(); //MANY TO MENY con UserEntity
+//--------------------------
     @ManyToMany
     @JoinTable(
             name = "follower",
@@ -241,11 +241,11 @@ public class UserEntity implements Serializable, GenericEntityInterface {
         this.albums = albums;
     }
 
-    public List<ImageEntity> getLikedImage() {
+    public List<UserEntity> getLikedImage() {
         return likedImage;
     }
 
-    public void setLikedImage(List<ImageEntity> likedImage) {
+    public void setLikedImage(List<UserEntity> likedImage) {
         this.likedImage = likedImage;
     }
 
