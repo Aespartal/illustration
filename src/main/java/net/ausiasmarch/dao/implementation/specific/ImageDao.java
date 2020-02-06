@@ -8,7 +8,6 @@ package net.ausiasmarch.dao.implementation.specific;
 import net.ausiasmarch.dao.implementation.generic.GenericDaoImplementation;
 import net.ausiasmarch.dao.interfaces.generic.GenericDaoInterface;
 import net.ausiasmarch.dao.interfaces.specific.ImageDaoJpaInterface;
-import net.ausiasmarch.entity.ImageEntity;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,22 +24,20 @@ public class ImageDao extends GenericDaoImplementation<GenericEntityInterface> i
    
         //------------------------------
         public Boolean findlike(Integer user_id, Integer image_id){
-            if(!oImageRepository.findlike(user_id,image_id).isEmpty()){
+            if(oImageRepository.findlike(user_id,image_id).isEmpty()){
+                System.out.print("Esta vacio");
                 return true;
-            }
-            return false;
+            } else {
+                System.out.print("No esta vacio");
+                return false;
+            } 
         }
-        public Boolean removelike(Integer user_id, Integer image_id){
-             if(oImageRepository.removeLike(user_id,image_id)){
-                return true;
-            }
-            return false;
+        public void removelike(Integer user_id, Integer image_id){
+              oImageRepository.removeLike(user_id,image_id);
         }
-         public Boolean saveLike(Integer user_id, Integer image_id){
-            if(oImageRepository.saveLike(user_id,image_id)){
-                return true;
-            }
-            return false;
+         public void saveLike(Integer user_id, Integer image_id){
+             oImageRepository.saveLike(user_id,image_id);
+         
         }
         //------------------------------
 }

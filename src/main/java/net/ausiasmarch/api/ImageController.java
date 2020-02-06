@@ -5,6 +5,7 @@
  */
 package net.ausiasmarch.api;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.ausiasmarch.entity.AlbumEntity;
@@ -77,8 +78,8 @@ public class ImageController {
     }
 
     @PostMapping("/like") // login
-    public ResponseEntity<Boolean> like(@RequestParam Map<Integer, Integer> mParametros) {
-        return new ResponseEntity<>(oImageService.like(mParametros), HttpStatus.OK);
+    public ResponseEntity<Boolean> like(@RequestParam(name = "user_id") Integer user_id,@RequestParam(name = "image_id") Integer image_id) {
+        return new ResponseEntity<>(oImageService.like(user_id,image_id), HttpStatus.OK);
     }
 
     @PostMapping("/fill/{number}")
