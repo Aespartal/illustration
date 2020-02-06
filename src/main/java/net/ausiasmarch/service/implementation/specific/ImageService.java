@@ -1,6 +1,7 @@
 package net.ausiasmarch.service.implementation.specific;
 
 import net.ausiasmarch.dao.implementation.specific.ImageDao;
+import net.ausiasmarch.entity.ImageEntity;
 import net.ausiasmarch.service.implementation.generic.GenericServiceImplementation;
 import net.ausiasmarch.service.interfaces.generic.GenericServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,4 +29,5 @@ public class ImageService extends GenericServiceImplementation implements Generi
         }
         return state;
     }
+    
 }

@@ -5,6 +5,7 @@
  */
 package net.ausiasmarch.api;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,13 @@ import net.ausiasmarch.entity.ImageEntity;
 import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import net.ausiasmarch.service.implementation.specific.ImageService;
+import net.ausiasmarch.service.implementation.specific.StorageService;
+import static org.apache.tomcat.jni.Lock.name;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.apache.tomcat.util.http.fileupload.RequestContext;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +38,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 @RestController
@@ -38,6 +49,9 @@ public class ImageController {
 
     @Autowired
     ImageService oImageService;
+
+    @Autowired
+    private StorageService storageService;
 
     @GetMapping("/{id}")
     public ResponseEntity<ImageEntity> get(@PathVariable(value = "id") int id) {
@@ -78,8 +92,13 @@ public class ImageController {
     }
 
     @PostMapping("/like") // login
-    public ResponseEntity<Boolean> like(@RequestParam(name = "user_id") Integer user_id,@RequestParam(name = "image_id") Integer image_id) {
-        return new ResponseEntity<>(oImageService.like(user_id,image_id), HttpStatus.OK);
+    public ResponseEntity<Boolean> like(@RequestParam(name = "user_id") Integer user_id, @RequestParam(name = "image_id") Integer image_id) {
+        return new ResponseEntity<>(oImageService.like(user_id, image_id), HttpStatus.OK);
+    }
+
+    @PostMapping("/upload")     
+    public ResponseEntity<Boolean> upload(@RequestParam(name = "file") MultipartFile[] files) throws Exception { 
+         return new ResponseEntity<>( storageService.uploadFile(files), HttpStatus.OK);
     }
 
     @PostMapping("/fill/{number}")
