@@ -1,6 +1,9 @@
 package net.ausiasmarch.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -21,17 +24,20 @@ import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 public class CommentEntity implements Serializable, GenericEntityInterface {
 
     @Id
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    
+    private String body;
+  
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private UserEntity user;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "image_id") 
+    @JsonIgnore
     private ImageEntity image;
-    private String body;
     
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date date;
@@ -78,7 +84,7 @@ public class CommentEntity implements Serializable, GenericEntityInterface {
     public void setUser(UserEntity user) {
         this.user = user;
     }
-
+    
     public ImageEntity getImage() {
         return image;
     }
@@ -94,13 +100,5 @@ public class CommentEntity implements Serializable, GenericEntityInterface {
     public void setDate(Date date) {
         this.date = date;
     }
-
-    @Override
-    public String toString() {
-        return "CommentEntity{" + "id=" + id + ", user=" + user + ", image=" + image + ", body=" + body + ", date=" + date + '}';
-    }
- 
-    
-    
 
 }

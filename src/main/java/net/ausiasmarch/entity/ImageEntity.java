@@ -5,13 +5,16 @@
  */
 package net.ausiasmarch.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,15 +40,16 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
     private String image;
     private String title;
     private String description;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date date;
     private String tags;
     private Boolean is_private;
     private Boolean is_reported;
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "album_id")
-    @JsonIgnore
     private AlbumEntity album;
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
@@ -63,6 +67,9 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
     )
     @JsonIgnore
     private List<CommentEntity> comments = new ArrayList<CommentEntity>();
+
+    public ImageEntity() {
+    }
     
     @Override
     public Integer getId() {
@@ -159,6 +166,10 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
 
     public void setComments(List<CommentEntity> comments) {
         this.comments = comments;
+    }
+    
+    public String getField(String filter) {
+        return filter.matches("id|title|description|date|tags") ? filter : null;
     }
 
     

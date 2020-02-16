@@ -61,12 +61,12 @@ public class CategoryController {
 	}
 
 	@PostMapping("/") // @RequestParam para uso parametro a parametro
-	public ResponseEntity<CategoryEntity> create(@RequestBody GenericEntityInterface oCategoryEntity) {
+	public ResponseEntity<CategoryEntity> create(@RequestBody CategoryEntity oCategoryEntity) {
 		return new ResponseEntity<>((CategoryEntity) oCategoryService.create(oCategoryEntity), HttpStatus.OK);
 	}
 
 	@PutMapping("/") // @RequestParam para uso parametro a parametro
-	public ResponseEntity<CategoryEntity> update(@RequestBody GenericEntityInterface oCategoryEntity) {
+	public ResponseEntity<CategoryEntity> update(@RequestBody CategoryEntity oCategoryEntity) {
 		return new ResponseEntity<>((CategoryEntity) oCategoryService.update(oCategoryEntity), HttpStatus.OK);
 	}
 }

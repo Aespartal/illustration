@@ -1,5 +1,6 @@
 package net.ausiasmarch.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import java.io.Serializable;
@@ -14,10 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import javax.persistence.Embedded;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -59,41 +59,45 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     @Column(columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean is_reported;
+ 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
+    //@JsonManagedReference(value="user_role")
     private RolEntity role;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.ALL})
-    @JsonIgnore
-    private List<AlbumEntity> albums = new ArrayList<>();
+    
+    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.ALL}) 
+    @JsonIgnore//@JsonBackReference(value="user-album")
+    private Set<AlbumEntity> albums = new HashSet<AlbumEntity>();
 //-----------------------
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     @JoinTable(
             name = "like_image",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
-    @JsonIgnore
-    private List<UserEntity> likedImage = new ArrayList<>(); //MANY TO MENY con UserEntity
+   @JsonIgnore// @JsonBackReference(value="user_image")
+    private Set<UserEntity> likedImage = new HashSet<UserEntity>(); //MANY TO MENY 
 //--------------------------
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "follower",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id",referencedColumnName = "id"))
-    @JsonIgnore
-    private List<UserEntity> friends = new ArrayList<UserEntity>();
+    @JsonIgnore//@JsonBackReference(value="user_friend")
+    private Set<UserEntity> friends = new HashSet<UserEntity>();
     
     @OneToMany(
         mappedBy = "user",
         cascade = CascadeType.ALL,
-        orphanRemoval = true
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
     )
-    @JsonIgnore
-    private List<CommentEntity> comments = new ArrayList<CommentEntity>();
+   @JsonIgnore//@JsonBackReference
+    private Set<CommentEntity> comments = new HashSet<CommentEntity>();
     
-    @OneToMany(mappedBy="to", cascade = {CascadeType.ALL})
-    @JsonIgnore
-    private List<MessageEntity> messages = new ArrayList<MessageEntity>();;
+    @OneToMany(fetch = FetchType.LAZY,mappedBy="to", cascade = {CascadeType.ALL})
+    @JsonIgnore//@JsonBackReference
+    private Set<MessageEntity> messages = new HashSet<MessageEntity>();
     
     public UserEntity() {
     }
@@ -120,7 +124,7 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     public void setUsername(String username) {
         this.username = username;
     }
-
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -224,7 +228,7 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     public void setIs_reported(Boolean is_reported) {
         this.is_reported = is_reported;
     }
-
+    
     public RolEntity getRole_id() {
         return role;
     }
@@ -233,27 +237,27 @@ public class UserEntity implements Serializable, GenericEntityInterface {
         this.role = role_id;
     }
 
-    public List<AlbumEntity> getAlbums() {
+    public Set<AlbumEntity> getAlbums() {
         return albums;
     }
 
-    public void setAlbums(List<AlbumEntity> albums) {
+    public void setAlbums(Set<AlbumEntity> albums) {
         this.albums = albums;
     }
 
-    public List<UserEntity> getLikedImage() {
+    public Set<UserEntity> getLikedImage() {
         return likedImage;
     }
 
-    public void setLikedImage(List<UserEntity> likedImage) {
+    public void setLikedImage(Set<UserEntity> likedImage) {
         this.likedImage = likedImage;
     }
 
-    public List<UserEntity> getFriends() {
+    public Set<UserEntity> getFriends() {
         return friends;
     }
 
-    public void setFriends(List<UserEntity> friends) {
+    public void setFriends(Set<UserEntity> friends) {
         this.friends = friends;
     }
 
@@ -281,19 +285,19 @@ public class UserEntity implements Serializable, GenericEntityInterface {
         this.surname2 = surname2;
     }
 
-    public List<CommentEntity> getComments() {
+    public Set<CommentEntity> getComments() {
         return comments;
     }
 
-    public void setComments(List<CommentEntity> comments) {
+    public void setComments(Set<CommentEntity> comments) {
         this.comments = comments;
     }
 
-    public List<MessageEntity> getMessages() {
+    public Set<MessageEntity> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<MessageEntity> messages) {
+    public void setMessages(Set<MessageEntity> messages) {
         this.messages = messages;
     }
 

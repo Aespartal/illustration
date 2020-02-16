@@ -1,9 +1,10 @@
 package net.ausiasmarch.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
 
 /**
@@ -31,18 +34,12 @@ public class RolEntity implements Serializable, GenericEntityInterface {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String description;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role", cascade = { CascadeType.ALL }, orphanRemoval = true)
-        @JsonIgnore
-	private List<UserEntity> users = new ArrayList<>();
+         //@JsonBackReference(value="user-role")
+	private Set<UserEntity> users = new HashSet<>();
 
 	public RolEntity() {
 
-	}
-
-	public RolEntity(Integer id, String description) {
-		this.id = id;
-		this.description = description;
 	}
 
 	public RolEntity(String description) {
@@ -66,12 +63,13 @@ public class RolEntity implements Serializable, GenericEntityInterface {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public List<UserEntity> getUsers() {
+        
+        @JsonIgnore
+	public Set<UserEntity> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<UserEntity> users) {
+	public void setUsers(Set<UserEntity> users) {
 		this.users = users;
 	}
 

@@ -1,12 +1,14 @@
 package net.ausiasmarch.entity;
 
+
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
+
 
 @Entity
 @Table(name = "category")
@@ -27,7 +30,7 @@ public class CategoryEntity implements Serializable, GenericEntityInterface {
     private String description;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = {CascadeType.ALL})
-    @JsonIgnore
+    @JsonIgnore//@JsonBackReference(value="image-category")
     private List<ImageEntity> images = new ArrayList<>();
 
     @Override
@@ -47,7 +50,7 @@ public class CategoryEntity implements Serializable, GenericEntityInterface {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    @JsonIgnore
     public List<ImageEntity> getImages() {
         return images;
     }

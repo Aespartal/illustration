@@ -1,7 +1,10 @@
 package net.ausiasmarch.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,10 +39,11 @@ public class AlbumEntity implements Serializable, GenericEntityInterface {
     private Boolean is_private;
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "user_id")
+    @JsonIgnore //@JsonManagedReference(value="user-album")
     private UserEntity user;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "album", cascade = {CascadeType.ALL})
     
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "album", cascade = {CascadeType.ALL})
+    @JsonIgnore //@JsonBackReference(value="image-album")
     private List<ImageEntity> images = new ArrayList<>();
 
     public AlbumEntity() {
@@ -78,7 +82,7 @@ public class AlbumEntity implements Serializable, GenericEntityInterface {
     public void setIs_private(Boolean is_private) {
         this.is_private = is_private;
     }
-
+    @JsonIgnore
     public UserEntity getUser_id() {
         return user;
     }
@@ -87,7 +91,7 @@ public class AlbumEntity implements Serializable, GenericEntityInterface {
         this.user = user;
     }
 
-    
+    @JsonIgnore
     public List<ImageEntity> getImages() {
         return images;
     }

@@ -5,10 +5,37 @@
  */
 package net.ausiasmarch.entity;
 
-/**
- *
- * @author espar
- */
-public class LikeEntity {
+import java.io.Serializable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
+import org.springframework.beans.factory.annotation.Value;
+
+@Entity
+@Table(name="like_image")
+public class LikeEntity implements Serializable {
+    
+    @EmbeddedId LikeId id;
+
+    public LikeEntity() {
+    }
+
+    public LikeEntity(LikeId id) {
+        this.id = id;
+    }
+    
+    public LikeId getId() {
+        return id;
+    }
+
+    public void setId(LikeId id) {
+        this.id = id;
+    }
+
+
+    
+    
     
 }

@@ -5,23 +5,19 @@
  */
 package net.ausiasmarch.api;
 
-import java.io.File;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import javafx.util.Pair;
 import net.ausiasmarch.entity.AlbumEntity;
 import net.ausiasmarch.entity.CategoryEntity;
 import net.ausiasmarch.entity.ImageEntity;
-import net.ausiasmarch.entity.UserEntity;
+import net.ausiasmarch.entity.LikeEntity;
+import net.ausiasmarch.entity.LikeId;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import net.ausiasmarch.service.implementation.specific.ImageService;
 import net.ausiasmarch.service.implementation.specific.StorageService;
-import static org.apache.tomcat.jni.Lock.name;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
-import org.apache.tomcat.util.http.fileupload.RequestContext;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,8 +35,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 @RestController
@@ -62,18 +56,37 @@ public class ImageController {
     public ResponseEntity<List<ImageEntity>> get() {
         return new ResponseEntity<>(oImageService.getall(), HttpStatus.OK);
     }
+    
+    @GetMapping("/favourite/{user}")
+    public ResponseEntity<List<ImageEntity>> favourite(@PathVariable(value = "user") int user_id) {
+        return new ResponseEntity<>(oImageService.favourite(user_id), HttpStatus.OK);
+    }
 
+    @GetMapping("/myimages/{user}")
+    public ResponseEntity<List<ImageEntity>> myimages(@PathVariable(value = "user") int user_id) {
+        return new ResponseEntity<>(oImageService.myimages(user_id), HttpStatus.OK);
+    }
+    
     @GetMapping("/count")
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(oImageService.count(), HttpStatus.OK);
     }
 
     @GetMapping("/getpage/{page}/{rpp}")
-    public ResponseEntity<Page<ImageEntity>> getPage(@PathVariable(value = "page") int page,
-            @PathVariable(value = "rpp") int rpp) {
+    public ResponseEntity<Page<ImageEntity>> getPage(
+            @PathVariable(value = "page") int page,
+            @PathVariable(value = "rpp") int rpp,
+            @RequestParam("filter") Optional<String> filter,
+            @RequestParam("sort") Optional<String> sort) {
         Pageable oPageable;
         oPageable = PageRequest.of(page, rpp);
+        
         return new ResponseEntity<>(oImageService.getPage(oPageable), HttpStatus.OK);
+    }
+    
+     @GetMapping("/")
+    public ResponseEntity<List<ImageEntity>> findFilter(@RequestParam Optional<String> title) {
+        return new ResponseEntity<>(oImageService.findFilter(title.orElse("_")), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -92,13 +105,20 @@ public class ImageController {
     }
 
     @PostMapping("/like") // login
-    public ResponseEntity<Boolean> like(@RequestParam(name = "user_id") Integer user_id, @RequestParam(name = "image_id") Integer image_id) {
-        return new ResponseEntity<>(oImageService.like(user_id, image_id), HttpStatus.OK);
+    public ResponseEntity<LikeEntity> like(@RequestBody LikeId mParametros) {    
+        Integer usuario_id = mParametros.getUser_id();
+        Integer image_id = mParametros.getImage_id();
+        return new ResponseEntity<>(oImageService.like(usuario_id,image_id), HttpStatus.OK);
     }
 
     @PostMapping("/upload")     
     public ResponseEntity<Boolean> upload(@RequestParam(name = "file") MultipartFile[] files) throws Exception { 
          return new ResponseEntity<>( storageService.uploadFile(files), HttpStatus.OK);
+    }
+    
+    @GetMapping("/getall/{category_id}")
+    public ResponseEntity<List<ImageEntity>> getAllByCategory(@PathVariable(value = "category_id") Integer category_id) {
+        return new ResponseEntity<>(oImageService.getAllByCategory(category_id), HttpStatus.OK);
     }
 
     @PostMapping("/fill/{number}")
@@ -174,7 +194,7 @@ public class ImageController {
             oImageEntity.setTitle(tituloImage);
             oImageEntity.setDescription(desc);
             oImageEntity.setTags(tag);
-            oImageEntity.setDate(new java.sql.Date(new java.util.Date().getTime()));
+            oImageEntity.setDate(new Date());
             oImageEntity.setIs_private(false);
             oImageEntity.setIs_reported(false);
             oImageEntity.setAlbum(oAlbumEntity);

@@ -5,8 +5,11 @@
  */
 package net.ausiasmarch.dao.interfaces.specific;
 import java.util.List;
+import java.util.Map;
+import javafx.util.Pair;
 import javax.transaction.Transactional;
 import net.ausiasmarch.entity.ImageEntity;
+import net.ausiasmarch.entity.LikeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,17 +17,16 @@ import org.springframework.data.repository.query.Param;
 
 
 public interface ImageDaoJpaInterface extends JpaRepository<ImageEntity, String> {
-    //BUSCA EN LA TABLA LIKE_IMAGE SI HA DADO LIKE
-    @Query(value="SELECT * FROM like_image WHERE user_id=:user_id AND image_id=:image_id",nativeQuery=true)
-    List<String> findlike(@Param("user_id")Integer user_id,@Param("image_id")Integer image_id);
-    @Transactional
-    @Modifying(clearAutomatically = false)
-    @Query(value="DELETE FROM like_image WHERE user_id=:user_id AND image_id=:image_id",nativeQuery=true)
-    void removeLike(@Param("user_id")Integer user_id,@Param("image_id")Integer image_id);
+  
+     @Query("SELECT i FROM ImageEntity i WHERE id LIKE %?1% OR title LIKE %?1% OR description LIKE %?1% OR date LIKE %?1% OR tags LIKE %?1%")
+    List<ImageEntity> findFilter(String title);
     
-    @Transactional
-    @Modifying(clearAutomatically = false)
-    @Query(value="INSERT INTO like_image (user_id, image_id) VALUES (:user_id, :image_id)",nativeQuery=true)
-    void saveLike(@Param("user_id")Integer user_id,@Param("image_id")Integer image_id);
+    @Query("SELECT i FROM ImageEntity i WHERE i.category.id = ?1")
+    List<ImageEntity> getAllByCategory(Integer category_id);
     
+    @Query(value="SELECT * FROM image i, like_image u WHERE i.id = u.image_id AND u.user_id=:user_id",nativeQuery=true)
+    List<ImageEntity> favourite(Integer user_id);
+    
+    @Query(value="SELECT i.* FROM image i, album a, user u WHERE i.album_id = a.id AND a.user_id =:user_id GROUP BY i.id",nativeQuery=true)
+    List<ImageEntity> myimages(Integer user_id);
 }

@@ -102,7 +102,7 @@ public class UserController {
        
         for (int i = 0; number > i; i++) {
             UserEntity oUserEntity = new UserEntity();
-             RolEntity oRolEntity = new RolEntity(2, "Artista");
+             RolEntity oRolEntity = new RolEntity("Artista");
              
             String name = nombre[(int) (Math.random() * nombre.length) + 0];
             String surname1 = apellido1[(int) (Math.random() * apellido1.length) + 0];

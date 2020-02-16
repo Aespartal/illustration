@@ -75,6 +75,11 @@ public class CommentController {
 	public ResponseEntity<CommentEntity> update(@RequestBody GenericEntityInterface oCommentEntity) {
 		return new ResponseEntity<>((CommentEntity) oCommentService.update(oCommentEntity), HttpStatus.OK);
 	}
+        
+        @GetMapping("/getall/{id}")
+	public ResponseEntity<List<CommentEntity>> getcomments(@PathVariable(value = "id") Integer id) {
+		return new ResponseEntity<>(oCommentService.getcomments(id), HttpStatus.OK);
+	}
     
         
         @PostMapping("/fill/{number}")

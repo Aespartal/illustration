@@ -5,8 +5,11 @@
  */
 package net.ausiasmarch.dao.interfaces.specific;
 
+import java.util.List;
 import net.ausiasmarch.entity.CommentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -14,4 +17,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CommentDaoJpaInterface extends JpaRepository<CommentEntity, Integer> {
     
+    @Query(value="SELECT * FROM comments c, image i WHERE c.image_id=i.id AND i.id=:id",nativeQuery=true)
+    List<CommentEntity> getcomments(Integer id);
 }

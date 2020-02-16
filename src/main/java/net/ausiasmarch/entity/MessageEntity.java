@@ -5,7 +5,9 @@
  */
 package net.ausiasmarch.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -27,6 +29,7 @@ public class MessageEntity implements Serializable {
     private UserEntity to;
     @ManyToOne 
     @MapsId("from_id")
+    @JsonIgnore//@JsonManagedReference
     private UserEntity from;
     
     private String body;
