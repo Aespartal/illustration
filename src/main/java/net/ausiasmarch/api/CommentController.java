@@ -67,12 +67,12 @@ public class CommentController {
 	}
 
 	@PostMapping("/") // @RequestParam para uso parametro a parametro
-	public ResponseEntity<CommentEntity> create(@RequestBody GenericEntityInterface oCommentEntity) {
+	public ResponseEntity<CommentEntity> create(@RequestBody CommentEntity oCommentEntity) {
 		return new ResponseEntity<>((CommentEntity) oCommentService.create(oCommentEntity), HttpStatus.OK);
 	}
 
 	@PutMapping("/") // @RequestParam para uso parametro a parametro
-	public ResponseEntity<CommentEntity> update(@RequestBody GenericEntityInterface oCommentEntity) {
+	public ResponseEntity<CommentEntity> update(@RequestBody CommentEntity oCommentEntity) {
 		return new ResponseEntity<>((CommentEntity) oCommentService.update(oCommentEntity), HttpStatus.OK);
 	}
         

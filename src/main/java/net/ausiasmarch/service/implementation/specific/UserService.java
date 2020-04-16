@@ -13,17 +13,27 @@ import net.ausiasmarch.service.interfaces.specific.UserServiceInterface;
 
 @Service
 public class UserService extends GenericServiceImplementation implements GenericServiceInterface, UserServiceInterface {
-        @Autowired
-        protected UserDao oUserDao;
-        
-	@Autowired
-	public UserService(UserDao oUserDao) {
-		super(oUserDao);
-	}
 
-        @Override
-        public UserEntity login(Map<String, String> mParametros) {
-		return oUserDao.login(mParametros.get("username"), mParametros.get("password"));
-	}
+    @Autowired
+    protected UserDao oUserDao;
 
+    @Autowired
+    public UserService(UserDao oUserDao) {
+        super(oUserDao);
+    }
+
+    @Override
+    public UserEntity login(Map<String, String> mParametros) {
+        return oUserDao.login(mParametros.get("username"), mParametros.get("password"));
+    }
+
+     public UserEntity getUsername(String username) {
+        return oUserDao.getUsername(username);
+    }
+    
+    public UserEntity findUserByImage(Integer image_id) {
+        return oUserDao.findUserByImage(image_id);
+    }
+    
+    
 }

@@ -95,12 +95,12 @@ public class ImageController {
     }
 
     @PostMapping("/") // @RequestParam para uso parametro a parametro
-    public ResponseEntity<ImageEntity> create(@RequestBody GenericEntityInterface oImageEntity) {
+    public ResponseEntity<ImageEntity> create(@RequestBody ImageEntity oImageEntity) {
         return new ResponseEntity<>((ImageEntity) oImageService.create(oImageEntity), HttpStatus.OK);
     }
 
     @PutMapping("/") // @RequestParam para uso parametro a parametro
-    public ResponseEntity<ImageEntity> update(@RequestBody GenericEntityInterface oImageEntity) {
+    public ResponseEntity<ImageEntity> update(@RequestBody ImageEntity oImageEntity) {
         return new ResponseEntity<>((ImageEntity) oImageService.update(oImageEntity), HttpStatus.OK);
     }
 

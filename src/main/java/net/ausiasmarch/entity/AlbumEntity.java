@@ -49,6 +49,10 @@ public class AlbumEntity implements Serializable, GenericEntityInterface {
     public AlbumEntity() {
     }
 
+    public AlbumEntity(Integer id) {
+        this.id = id;
+    }
+    
     @Override
     public Integer getId() {
         return id;

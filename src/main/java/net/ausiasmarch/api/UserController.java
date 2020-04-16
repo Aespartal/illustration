@@ -37,6 +37,11 @@ public class UserController {
     public ResponseEntity<UserEntity> get(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>((UserEntity) oUserService.get(id), HttpStatus.OK);
     }
+    
+    @GetMapping("/name/{username}")
+    public ResponseEntity<UserEntity> getUsername(@PathVariable(value = "username") String username) {
+        return new ResponseEntity<>((UserEntity) oUserService.getUsername(username), HttpStatus.OK);
+    }
 
     @GetMapping("/getall")
     public ResponseEntity<List<UserEntity>> get() {
@@ -75,15 +80,19 @@ public class UserController {
     }
 
     @PostMapping("/") // @RequestParam para uso parametro a parametro
-    public ResponseEntity<UserEntity> create(@RequestBody GenericEntityInterface oUserBean) {
+    public ResponseEntity<UserEntity> create(@RequestBody UserEntity oUserBean) {
         return new ResponseEntity<>((UserEntity) oUserService.create(oUserBean), HttpStatus.OK);
     }
 
     @PutMapping("/") // @RequestParam para uso parametro a parametro
-    public ResponseEntity<UserEntity> update(@RequestBody GenericEntityInterface oUserBean) {
+    public ResponseEntity<UserEntity> update(@RequestBody UserEntity oUserBean) {
         return new ResponseEntity<>((UserEntity) oUserService.update(oUserBean), HttpStatus.OK);
     }
 
+     @GetMapping("/userbyimage/{image_id}")
+    public ResponseEntity<UserEntity> findUserByImage(@PathVariable(value = "image_id") Integer image_id) {
+        return new ResponseEntity<>((UserEntity) oUserService.findUserByImage(image_id), HttpStatus.OK);
+    }
 
     @PostMapping("/fill/{number}")
     public ResponseEntity<String>

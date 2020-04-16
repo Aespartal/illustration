@@ -19,7 +19,7 @@ public class CommentDao extends GenericDaoImplementation<GenericEntityInterface>
         super(oCommentDaoInterface);
     }
     
-      public List<CommentEntity> getcomments(Integer id){
+    public List<CommentEntity> getcomments(Integer id){
         return oCommentDaoJpaInterface.getcomments(id);
     }
 }

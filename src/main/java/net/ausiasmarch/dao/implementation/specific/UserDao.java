@@ -25,5 +25,12 @@ public class UserDao extends GenericDaoImplementation<GenericEntityInterface> im
     public UserEntity login(String login, String password) {
         return oUserRepository.findByLogin(login, password);
     }
+    
+     public UserEntity getUsername(String username) {
+        return oUserRepository.getUsername(username);
+    }
 
+    public UserEntity findUserByImage(Integer image_id){
+        return oUserRepository.findUserByImage(image_id);
+    }
 }

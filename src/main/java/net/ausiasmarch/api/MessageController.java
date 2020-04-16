@@ -62,8 +62,8 @@ public class MessageController {
     }
 
     @PostMapping("/") // @RequestParam para uso parametro a parametro
-    public ResponseEntity<MessageEntity> create(@RequestBody GenericEntityInterface oRoleEntity) {
-        return new ResponseEntity<>((MessageEntity) oMessageService.create(oRoleEntity), HttpStatus.OK);
+    public ResponseEntity<MessageEntity> create(@RequestBody GenericEntityInterface oMessageEntity) {
+        return new ResponseEntity<>((MessageEntity) oMessageService.create(oMessageEntity), HttpStatus.OK);
     }
 
     @PutMapping("/") // @RequestParam para uso parametro a parametro
