@@ -104,11 +104,10 @@ public class CommentController {
              for (int i = 0; number > i; i++) {
              UserEntity oUserEntity = new UserEntity();
              ImageEntity oImageEntity = new ImageEntity();
-             CommentEntity oCommentEntity = new CommentEntity();
-             
-             oUserEntity.setId((int) Math.floor(Math.random() * 10) + 4);
-             System.out.println(oUserEntity.getId());
+             CommentEntity oCommentEntity = new CommentEntity(); 
+             oUserEntity.setId((int) Math.floor(Math.random() * 10) + 2);
              oImageEntity.setId((int) Math.floor(Math.random() * 10) + 1);
+             
              String body = comentarios[(int) (Math.random() * comentarios.length) + 0];
              oCommentEntity.setDate(Calendar.getInstance().getTime());
              oCommentEntity.setUser_id(oUserEntity);

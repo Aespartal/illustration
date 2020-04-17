@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.specific.UserService;
 import org.springframework.data.domain.Sort;
@@ -98,6 +97,7 @@ public class UserController {
     public ResponseEntity<String>
             fill(@PathVariable(value = "number") int number) {
         String img = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+        String img_cover ="https://blogthinkbig.com/wp-content/uploads/2018/07/V%C3%ADa-L%C3%A1ctea-portada-espacio-universo.jpg";
 
         FakeValuesService fakeValuesService = new FakeValuesService(new Locale("es-ES"), new RandomService());
         String[] nombre = {"Marcel·li", "Pompeu", "Cirili", "Paco", "Josepa", "Vidal", "Domènec", "Maurici", "Eudald",
@@ -111,7 +111,7 @@ public class UserController {
        
         for (int i = 0; number > i; i++) {
             UserEntity oUserEntity = new UserEntity();
-             RolEntity oRolEntity = new RolEntity("Artista");
+             RolEntity oRolEntity = new RolEntity(2,"Artista");
              
             String name = nombre[(int) (Math.random() * nombre.length) + 0];
             String surname1 = apellido1[(int) (Math.random() * apellido1.length) + 0];
@@ -134,7 +134,8 @@ public class UserController {
             oUserEntity.setDescription(description);
             oUserEntity.setToken(token);
             oUserEntity.setDate_register(new java.sql.Date(new java.util.Date().getTime()));
-            oUserEntity.setImg_profile(img);  
+            oUserEntity.setImg_profile(img);
+            oUserEntity.setImg_cover(img_cover);
             oUserEntity.setIs_private(false);
             oUserEntity.setIs_banned(false);
             oUserEntity.setIs_reported(false);

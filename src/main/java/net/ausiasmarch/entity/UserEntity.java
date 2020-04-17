@@ -15,8 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -65,10 +67,6 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     //@JsonManagedReference(value="user_role")
     private RolEntity role;
     
-    
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.ALL}) 
-    @JsonIgnore//@JsonBackReference(value="user-album")
-    private Set<AlbumEntity> albums = new HashSet<AlbumEntity>();
 //-----------------------
     @ManyToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     @JoinTable(
@@ -98,6 +96,10 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     @OneToMany(fetch = FetchType.LAZY,mappedBy="to", cascade = {CascadeType.ALL})
     @JsonIgnore//@JsonBackReference
     private Set<MessageEntity> messages = new HashSet<MessageEntity>();
+    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.ALL})
+    @JsonIgnore//@JsonBackReference(value="image-user")
+    private List<ImageEntity> images = new ArrayList<>();
     
     public UserEntity() {
     }
@@ -237,14 +239,6 @@ public class UserEntity implements Serializable, GenericEntityInterface {
         this.role = role_id;
     }
 
-    public Set<AlbumEntity> getAlbums() {
-        return albums;
-    }
-
-    public void setAlbums(Set<AlbumEntity> albums) {
-        this.albums = albums;
-    }
-
     public Set<UserEntity> getLikedImage() {
         return likedImage;
     }
@@ -301,6 +295,13 @@ public class UserEntity implements Serializable, GenericEntityInterface {
         this.messages = messages;
     }
 
-    
+    @JsonIgnore
+    public List<ImageEntity> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageEntity> images) {
+        this.images = images;
+    }
     
 }

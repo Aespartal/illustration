@@ -7,15 +7,12 @@ package net.ausiasmarch.api;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import javafx.util.Pair;
-import net.ausiasmarch.entity.AlbumEntity;
 import net.ausiasmarch.entity.CategoryEntity;
 import net.ausiasmarch.entity.ImageEntity;
 import net.ausiasmarch.entity.LikeEntity;
 import net.ausiasmarch.entity.LikeId;
-import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
+import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.specific.ImageService;
 import net.ausiasmarch.service.implementation.specific.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,15 +178,16 @@ public class ImageController {
 
         for (int i = 0; number > i; i++) {
             ImageEntity oImageEntity = new ImageEntity();
-            CategoryEntity oCategoryEntity = new CategoryEntity();
+            CategoryEntity oCategoryEntity = new CategoryEntity();           
             oCategoryEntity.setId((int) Math.floor(Math.random() * 5) + 1);
-            AlbumEntity oAlbumEntity = new AlbumEntity();
-            oAlbumEntity.setId((int) Math.floor(Math.random() * 5) + 1);
+            UserEntity oUserEntity = new UserEntity();
+            oUserEntity.setId((int) Math.floor(Math.random() * 10) + 2);
+            
             String tituloImage = title[(int) (Math.random() * title.length) + 0]; //image
             String path = imagenes[(int) (Math.random() * imagenes.length) + 0]; //image
             String desc = description[(int) (Math.random() * description.length) + 0]; //image
-            String tag = tags[(int) (Math.random() * tags.length) + 0]; //image
-
+            String tag = tags[(int) (Math.random() * tags.length) + 0]; //image   
+                    
             oImageEntity.setImage(path);
             oImageEntity.setTitle(tituloImage);
             oImageEntity.setDescription(desc);
@@ -197,9 +195,9 @@ public class ImageController {
             oImageEntity.setDate(new Date());
             oImageEntity.setIs_private(false);
             oImageEntity.setIs_reported(false);
-            oImageEntity.setAlbum(oAlbumEntity);
             oImageEntity.setCategory(oCategoryEntity);
-
+            oImageEntity.setUser(oUserEntity);
+                    
             oImageService.create(oImageEntity);
         }
         return new ResponseEntity<>("Se han añadido correctamente", HttpStatus.OK);

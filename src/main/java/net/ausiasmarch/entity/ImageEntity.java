@@ -47,13 +47,15 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
     private Boolean is_reported;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "album_id")
-    private AlbumEntity album;
-    
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
     //------------------------------------
+    
+     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+    //------------------------------------
+     
     @ManyToMany(
             mappedBy = "image",
             cascade = {CascadeType.ALL})
@@ -136,20 +138,21 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
         this.is_reported = is_reported;
     }
 
-    public AlbumEntity getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(AlbumEntity album) {
-        this.album = album;
-    }
-
     public CategoryEntity getCategory() {
         return category;
     }
 
     public void setCategory(CategoryEntity category) {
         this.category = category;
+    }
+    
+    
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public List<ImageEntity> getLikes() {

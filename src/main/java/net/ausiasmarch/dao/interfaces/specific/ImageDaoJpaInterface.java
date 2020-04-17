@@ -27,6 +27,6 @@ public interface ImageDaoJpaInterface extends JpaRepository<ImageEntity, String>
     @Query(value="SELECT * FROM image i, like_image u WHERE i.id = u.image_id AND u.user_id=:user_id",nativeQuery=true)
     List<ImageEntity> favourite(Integer user_id);
     
-    @Query(value="SELECT i.* FROM image i, album a, user u WHERE i.album_id = a.id AND a.user_id =:user_id GROUP BY i.id",nativeQuery=true)
+    @Query(value="SELECT i.* FROM image i, user u WHERE i.user_id = :user_id GROUP BY i.id",nativeQuery=true)
     List<ImageEntity> myimages(Integer user_id);
 }
