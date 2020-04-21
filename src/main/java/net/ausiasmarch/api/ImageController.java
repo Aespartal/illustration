@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -68,16 +70,14 @@ public class ImageController {
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(oImageService.count(), HttpStatus.OK);
     }
-
+    //Imagenes recientes
     @GetMapping("/getpage/{page}/{rpp}")
     public ResponseEntity<Page<ImageEntity>> getPage(
             @PathVariable(value = "page") int page,
             @PathVariable(value = "rpp") int rpp,
-            @RequestParam("filter") Optional<String> filter,
             @RequestParam("sort") Optional<String> sort) {
         Pageable oPageable;
-        oPageable = PageRequest.of(page, rpp);
-        
+         oPageable = PageRequest.of(page, rpp, Sort.by(Order.desc("date")));    
         return new ResponseEntity<>(oImageService.getPage(oPageable), HttpStatus.OK);
     }
     
