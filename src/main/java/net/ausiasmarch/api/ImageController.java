@@ -109,8 +109,8 @@ public class ImageController {
     }
 
     @PostMapping("/upload")     
-    public ResponseEntity<Boolean> upload(@RequestParam(name = "file") MultipartFile[] files) throws Exception { 
-         return new ResponseEntity<>( storageService.uploadFile(files), HttpStatus.OK);
+    public ResponseEntity<Boolean> upload(@RequestParam("file") MultipartFile file) throws Exception { 
+         return new ResponseEntity<>( storageService.uploadFile(file), HttpStatus.OK);
     }
     
     @GetMapping("/getall/{category_id}")

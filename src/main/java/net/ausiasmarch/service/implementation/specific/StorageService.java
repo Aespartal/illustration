@@ -17,21 +17,21 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class StorageService {
 
-    private final String fileBasePath = "D:\\xampp\\tomcat\\webapps\\imagenes\\";
+    private final String fileBasePath = "C:\\xampp\\htdocs\\illustration-client\\src\\assets\\images\\";
 
-    public Boolean uploadFile(MultipartFile[] files) throws Exception {
+    public Boolean uploadFile(MultipartFile file) throws Exception {
         Boolean state = false;
-        for (MultipartFile uploadedFile : files) {
-            String fileName = StringUtils.cleanPath(uploadedFile.getOriginalFilename());
-            Path path;
-            path = Paths.get(fileBasePath + fileName);
-            try {
-                Files.copy(uploadedFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+	String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+	Path path = Paths.get(fileBasePath + fileName);
+        
+	try {
+            if(Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING)!=0){
                 state = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+            }          
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
 
         return state;
     }
