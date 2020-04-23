@@ -56,6 +56,18 @@ public class ImageController {
         return new ResponseEntity<>(oImageService.getall(), HttpStatus.OK);
     }
     
+    @GetMapping("/popular/{page}/{rpp}")
+    public ResponseEntity<List<ImageEntity>> popular(@PathVariable(value = "page") int page,
+            @PathVariable(value = "rpp") int rpp) {      
+         Pageable oPageable = PageRequest.of(page, rpp);
+        return new ResponseEntity<>(oImageService.popular(oPageable), HttpStatus.OK);
+    }
+    
+    @GetMapping("/imageslikes/{user}")
+    public ResponseEntity<List<ImageEntity>> imageslikes(@PathVariable(value = "user") int user_id) { 
+        return new ResponseEntity<>(oImageService.imageslikes(user_id), HttpStatus.OK);
+    }
+    
     @GetMapping("/favourite/{user}")
     public ResponseEntity<List<ImageEntity>> favourite(@PathVariable(value = "user") int user_id) {
         return new ResponseEntity<>(oImageService.favourite(user_id), HttpStatus.OK);
@@ -122,24 +134,24 @@ public class ImageController {
     public ResponseEntity<String>
             fill(@PathVariable(value = "number") int number) {
         String[] imagenes = {
-            "https://dibujando.net/files/fs/p/c/900x1000/2020/11/FINISH_mini_delgada_417936.jpg",
-            "https://dibujando.net/files/fs/p/i/2020/13/erase_cuento_418092.jpg",
-            "https://dibujando.net/files/fs/p/i/2020/12/esqueleto1_418075.png",
-            "https://dibujando.net/files/fs/p/c/2000x2000/2020/23/RETRATOa_419157.jpg",
-            "https://dibujando.net/files/fs/p/c/2000x2000/2020/3/IlustracionDigital023_1__417268.jpg",
-            "https://dibujando.net/files/fs/p/c/900x1000/2020/19/VI_418887.jpg",
-            "https://dibujando.net/files/fs/p/i/2020/17/PAG_31_COL_418634.jpg",
-            "https://dibujando.net/files/fs/p/c/900x1000/2020/14/2A580BB7_5EEE_49D9_8D0B_4BD31C3B63CC_418225.jpeg",
-            "https://dibujando.net/files/fs/p/i/2020/12/JillSD_418077.jpg",
-            "https://dibujando.net/files/fs/p/c/2000x2000/2020/28/girl1_419811.jpg",
-            "https://dibujando.net/files/fs/p/c/900x1000/2020/23/llllllll_419226.jpg",
-            "https://dibujando.net/files/fs/p/c/2000x2000/2020/1/20200102_417141.jpg",
-            "https://dibujando.net/files/fs/p/i/2020/2/pt2020_01_02_21_22_27_mh1577996576440_417180.jpg",
-            "https://dibujando.net/files/fs/p/c/2000x2000/2020/1/25_417123.jpg",
-            "https://dibujando.net/files/fs/p/c/2000x2000/2020/1/25_417123.jpg",
-            "https://dibujando.net/files/fs/p/c/2000x2000/2020/9/IMG_20200110_417704.jpg",
-            "https://dibujando.net/files/fs/p/i/2020/13/20200114_418128.gif",
-            "https://dibujando.net/files/fs/p/i/2020/16/jrr_talkin_418416.jpg"
+            "FINISH_mini_delgada_417936.jpg",
+            "erase_cuento_418092.jpg",
+            "esqueleto1_418075.png",
+            "RETRATOa_419157.jpg",
+            "IlustracionDigital023_1__417268.jpg",
+            "VI_418887.jpg",
+            "PAG_31_COL_418634.jpg",
+            "2A580BB7_5EEE_49D9_8D0B_4BD31C3B63CC_418225.jpeg",
+            "JillSD_418077.jpg",
+            "girl1_419811.jpg",
+            "llllllll_419226.jpg",
+            "20200102_417141.jpg",
+            "pt2020_01_02_21_22_27_mh1577996576440_417180.jpg",
+            "25_417123.jpg",
+            "25_417123.jpg",
+            "IMG_20200110_417704.jpg",
+            "20200114_418128.gif",
+            "jrr_talkin_418416.jpg"
         };
         String[] title = {
             "La rosalia",

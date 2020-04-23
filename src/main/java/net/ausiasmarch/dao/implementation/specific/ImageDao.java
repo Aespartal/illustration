@@ -18,6 +18,8 @@ import net.ausiasmarch.entity.LikeEntity;
 import net.ausiasmarch.entity.LikeId;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -30,6 +32,14 @@ public class ImageDao extends GenericDaoImplementation<GenericEntityInterface> i
 	public ImageDao(ImageDaoJpaInterface oImageRepository) {
 		super(oImageRepository);
 	}
+        
+        public List<ImageEntity> popular(Pageable pageable){
+            return oImageRepository.popular(pageable.getPageNumber(), pageable.getPageSize());
+        }
+        
+         public List<ImageEntity> imageslikes(int user_id){
+            return oImageRepository.imageslikes(user_id);
+        }
 
         public List<ImageEntity> favourite(Integer user_id) {
             return oImageRepository.favourite(user_id);
