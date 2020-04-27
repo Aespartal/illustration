@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -28,15 +29,14 @@ import javax.persistence.Entity;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class RolEntity implements Serializable, GenericEntityInterface {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String description;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "role", cascade = {CascadeType.ALL}, orphanRemoval = true)
-    //@JsonBackReference(value="user-role")
-    private Set<UserEntity> users = new HashSet<>();
-
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "role", cascade = {CascadeType.ALL})
+    @JsonIgnore//@JsonBackReference(value="user-role")
+    private List<UserEntity> users = new ArrayList<>();
+    
     public RolEntity() {
 
     }
@@ -65,11 +65,11 @@ public class RolEntity implements Serializable, GenericEntityInterface {
     }
 
     @JsonIgnore
-    public Set<UserEntity> getUsers() {
+    public List<UserEntity> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<UserEntity> users) {
+    public void setUsers(List<UserEntity> users) {
         this.users = users;
     }
 

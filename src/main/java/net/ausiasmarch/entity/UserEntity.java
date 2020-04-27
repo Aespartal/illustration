@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -38,9 +39,10 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     private String surname1;
     private String surname2;
     private String username;
-    @JsonIgnore
     private String password;
     private String email;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date birthdate;
     @Column(columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean is_private;
@@ -50,17 +52,12 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     private String img_profile;
     private String img_cover;
     private String token;
-    private Integer level;
-    private Integer exp;
     @Column(columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean is_validate;
     @Column(columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean is_banned;
-    @Column(columnDefinition = "TINYINT")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private Boolean is_reported;
  
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
@@ -123,6 +120,22 @@ public class UserEntity implements Serializable, GenericEntityInterface {
         return username;
     }
 
+    public Date getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public RolEntity getRole() {
+        return role;
+    }
+
+    public void setRole(RolEntity role) {
+        this.role = role;
+    }
+    
     public void setUsername(String username) {
         this.username = username;
     }
@@ -130,7 +143,7 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     public String getPassword() {
         return password;
     }
-
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
@@ -191,22 +204,6 @@ public class UserEntity implements Serializable, GenericEntityInterface {
         this.token = token;
     }
 
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public Integer getExp() {
-        return exp;
-    }
-
-    public void setExp(Integer exp) {
-        this.exp = exp;
-    }
-
     public Boolean getIs_validate() {
         return is_validate;
     }
@@ -221,22 +218,6 @@ public class UserEntity implements Serializable, GenericEntityInterface {
 
     public void setIs_banned(Boolean is_banned) {
         this.is_banned = is_banned;
-    }
-
-    public Boolean getIs_reported() {
-        return is_reported;
-    }
-
-    public void setIs_reported(Boolean is_reported) {
-        this.is_reported = is_reported;
-    }
-    
-    public RolEntity getRole_id() {
-        return role;
-    }
-
-    public void setRole_id(RolEntity role_id) {
-        this.role = role_id;
     }
 
     public Set<UserEntity> getLikedImage() {
@@ -299,7 +280,7 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     public List<ImageEntity> getImages() {
         return images;
     }
-
+    @JsonProperty
     public void setImages(List<ImageEntity> images) {
         this.images = images;
     }

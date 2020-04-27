@@ -86,6 +86,7 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
         return image;
     }
 
+    
     public void setImage(String image) {
         this.image = image;
     }

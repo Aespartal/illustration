@@ -2,8 +2,11 @@ package net.ausiasmarch.api;
 
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import net.ausiasmarch.entity.RolEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.specific.UserService;
-import org.springframework.data.domain.Sort;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
@@ -36,7 +39,7 @@ public class UserController {
     public ResponseEntity<UserEntity> get(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>((UserEntity) oUserService.get(id), HttpStatus.OK);
     }
-    
+
     @GetMapping("/name/{username}")
     public ResponseEntity<UserEntity> getUsername(@PathVariable(value = "username") String username) {
         return new ResponseEntity<>((UserEntity) oUserService.getUsername(username), HttpStatus.OK);
@@ -60,19 +63,6 @@ public class UserController {
         return new ResponseEntity<>(oUserService.getPage(oPageable), HttpStatus.OK);
     }
 
-    @GetMapping("/getpage/{page}/{rpp}/{sortBy}/{order}")
-    public ResponseEntity<Page<UserEntity>> getPageUser(@PathVariable(value = "page") int page,
-            @PathVariable(value = "rpp") int rpp, @PathVariable(value = "sortBy") String sortBy,
-            @PathVariable(value = "order") String order) {
-        Pageable oPageable;
-        if (order.equalsIgnoreCase("asc")) {
-            oPageable = PageRequest.of(page, rpp, Sort.by(sortBy).ascending());
-        } else {
-            oPageable = PageRequest.of(page, rpp, Sort.by(sortBy).descending());
-        }
-        return new ResponseEntity<>(oUserService.getPage(oPageable), HttpStatus.OK);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>(oUserService.delete(id), HttpStatus.OK);
@@ -88,7 +78,7 @@ public class UserController {
         return new ResponseEntity<>((UserEntity) oUserService.update(oUserBean), HttpStatus.OK);
     }
 
-     @GetMapping("/userbyimage/{image_id}")
+    @GetMapping("/userbyimage/{image_id}")
     public ResponseEntity<UserEntity> findUserByImage(@PathVariable(value = "image_id") Integer image_id) {
         return new ResponseEntity<>((UserEntity) oUserService.findUserByImage(image_id), HttpStatus.OK);
     }
@@ -97,7 +87,7 @@ public class UserController {
     public ResponseEntity<String>
             fill(@PathVariable(value = "number") int number) {
         String img = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
-        String img_cover ="https://blogthinkbig.com/wp-content/uploads/2018/07/V%C3%ADa-L%C3%A1ctea-portada-espacio-universo.jpg";
+        String img_cover = "https://blogthinkbig.com/wp-content/uploads/2018/07/V%C3%ADa-L%C3%A1ctea-portada-espacio-universo.jpg";
 
         FakeValuesService fakeValuesService = new FakeValuesService(new Locale("es-ES"), new RandomService());
         String[] nombre = {"Marcel·li", "Pompeu", "Cirili", "Paco", "Josepa", "Vidal", "Domènec", "Maurici", "Eudald",
@@ -108,11 +98,11 @@ public class UserController {
 
         String[] descripciones = {"Soy el mejor artista.", " ", "Todos tenemos un artista interior. ", "Vivimos es una sociedad.",
             "Solo programo alarmas. ", "Mi vida es el dibujo", "Abre tu mente y descubriras lo que disfruta la gente de la vida.", "Programo en vanila jaja salu2. "};
-       
+
         for (int i = 0; number > i; i++) {
             UserEntity oUserEntity = new UserEntity();
-             RolEntity oRolEntity = new RolEntity(2,"Artista");
-             
+            RolEntity oRolEntity = new RolEntity(2, "Artista");
+
             String name = nombre[(int) (Math.random() * nombre.length) + 0];
             String surname1 = apellido1[(int) (Math.random() * apellido1.length) + 0];
             String surname2 = apellido2[(int) (Math.random() * apellido2.length) + 0];
@@ -120,11 +110,17 @@ public class UserController {
                     + surname1.substring(0, 2).toLowerCase().trim()
                     + surname2.substring(0, 2).toLowerCase().trim()
                     + (int) Math.floor(Math.random() * (1000 - 9999) + 9999);
-            
+
             String email = username + "@illustration.com";
             String description = descripciones[(int) (Math.random() * descripciones.length) + 0];
             String token = fakeValuesService.bothify("??###??##??#??#?#?##?##");
-  
+            
+            long aDay = TimeUnit.DAYS.toMillis(1);
+            long now = new Date().getTime();
+            Date hundredYearsAgo = new Date(now - aDay * 365 * 100);
+            Date tenDaysAgo = new Date(now - aDay * 10);
+            Date random = between(hundredYearsAgo, tenDaysAgo);
+
             oUserEntity.setName(name);
             oUserEntity.setSurname1(surname1);
             oUserEntity.setSurname2(surname2);
@@ -134,18 +130,28 @@ public class UserController {
             oUserEntity.setDescription(description);
             oUserEntity.setToken(token);
             oUserEntity.setDate_register(new java.sql.Date(new java.util.Date().getTime()));
+            oUserEntity.setBirthdate(random);
             oUserEntity.setImg_profile(img);
             oUserEntity.setImg_cover(img_cover);
             oUserEntity.setIs_private(false);
             oUserEntity.setIs_banned(false);
-            oUserEntity.setIs_reported(false);
             oUserEntity.setIs_validate(true);
-            oUserEntity.setRole_id(oRolEntity);
-            
+            oUserEntity.setRole(oRolEntity);
+
             oUserService.create(oUserEntity);
 
         }
         return new ResponseEntity<>("Se han añadido correctamente", HttpStatus.OK);
+    }
+
+    public static Date between(Date startInclusive, Date endExclusive) {
+        long startMillis = startInclusive.getTime();
+        long endMillis = endExclusive.getTime();
+        long randomMillisSinceEpoch = ThreadLocalRandom
+                .current()
+                .nextLong(startMillis, endMillis);
+
+        return new Date(randomMillisSinceEpoch);
     }
 
 }
