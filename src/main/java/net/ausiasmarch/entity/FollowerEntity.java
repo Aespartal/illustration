@@ -11,28 +11,27 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="like_image")
-public class LikeEntity implements Serializable {
+@Table(name="follower")
+public class FollowerEntity implements Serializable {
     
-    @EmbeddedId LikeId id;
+    @EmbeddedId FollowerId id;
 
-    public LikeEntity() {
+    public FollowerEntity() {
+       
     }
-
-    public LikeEntity(LikeId id) {
+    
+    public FollowerEntity(FollowerId id) {
         this.id = id;
     }
-    
-    public LikeId getId() {
+
+    public FollowerId getId() {
         return id;
     }
 
-    public void setId(LikeId id) {
+    public void setId(FollowerId id) {
         this.id = id;
     }
+    
+    
 
-
-    
-    
-    
 }

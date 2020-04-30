@@ -13,18 +13,18 @@ import javax.persistence.Embeddable;
  * @author espar
  */
 @Embeddable
-public class LikeId implements Serializable {
+public class FollowerId implements Serializable {
     private Integer user_id;
-    private Integer image_id;
+    private Integer friend_id;
 
-    public LikeId() {
+    public FollowerId() {
     }
-    
-    public LikeId(Integer user_id, Integer image_id) {
+
+    public FollowerId(Integer user_id, Integer friend_id) {
         this.user_id = user_id;
-        this.image_id = image_id;
+        this.friend_id = friend_id;
     }
-    
+
     public Integer getUser_id() {
         return user_id;
     }
@@ -33,12 +33,14 @@ public class LikeId implements Serializable {
         this.user_id = user_id;
     }
 
-    public Integer getImage_id() {
-        return image_id;
+    public Integer getFriend_id() {
+        return friend_id;
     }
 
-    public void setImage_id(Integer image_id) {
-        this.image_id = image_id;
+    public void setFriend_id(Integer friend_id) {
+        this.friend_id = friend_id;
     }
+    
+    
     
 }

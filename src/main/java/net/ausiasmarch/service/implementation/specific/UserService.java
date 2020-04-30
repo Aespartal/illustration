@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.ausiasmarch.dao.implementation.specific.UserDao;
+import net.ausiasmarch.entity.FollowerEntity;
 import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.generic.GenericServiceImplementation;
 import net.ausiasmarch.service.interfaces.generic.GenericServiceInterface;
@@ -35,5 +36,27 @@ public class UserService extends GenericServiceImplementation implements Generic
         return oUserDao.findUserByImage(image_id);
     }
     
+    public FollowerEntity follow(Integer user_id, Integer friend_id){
+        
+        if (oUserDao.findFollower(user_id, friend_id) != null) {
+            oUserDao.unFollow(user_id, friend_id);
+        } else {
+            oUserDao.follow(user_id, friend_id);
+        }
+        return oUserDao.findFollower(user_id, friend_id);
+        
+    }
+    
+    public Boolean findFollow(Integer user_id, Integer friend_id){
+        Boolean f = false;
+        if (oUserDao.findFollower(user_id, friend_id) != null) {
+            f = true;
+        } else {
+             f = false;
+        }
+        
+        return f;
+        
+    }
     
 }

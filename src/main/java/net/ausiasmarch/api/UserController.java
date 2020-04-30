@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import net.ausiasmarch.entity.FollowerEntity;
+import net.ausiasmarch.entity.FollowerId;
 import net.ausiasmarch.entity.RolEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -83,6 +85,19 @@ public class UserController {
         return new ResponseEntity<>((UserEntity) oUserService.findUserByImage(image_id), HttpStatus.OK);
     }
 
+    @PostMapping("/follow")
+    public ResponseEntity<FollowerEntity> follow(@RequestBody FollowerId mParametros) {
+        Integer user_id = mParametros.getUser_id();
+        Integer friend_id = mParametros.getFriend_id();
+        return new ResponseEntity<>(oUserService.follow(user_id, friend_id), HttpStatus.OK);
+    }
+    
+    @GetMapping("/findfollow/{user_id}/{friend_id}")
+    public ResponseEntity<Boolean> findfollow(@PathVariable(value = "user_id") Integer user_id,
+            @PathVariable(value = "friend_id") Integer friend_id) {
+        return new ResponseEntity<>(oUserService.findFollow(user_id, friend_id), HttpStatus.OK);
+    }
+
     @PostMapping("/fill/{number}")
     public ResponseEntity<String>
             fill(@PathVariable(value = "number") int number) {
@@ -114,7 +129,7 @@ public class UserController {
             String email = username + "@illustration.com";
             String description = descripciones[(int) (Math.random() * descripciones.length) + 0];
             String token = fakeValuesService.bothify("??###??##??#??#?#?##?##");
-            
+
             long aDay = TimeUnit.DAYS.toMillis(1);
             long now = new Date().getTime();
             Date hundredYearsAgo = new Date(now - aDay * 365 * 100);

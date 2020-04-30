@@ -95,7 +95,7 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     private Set<MessageEntity> messages = new HashSet<MessageEntity>();
     
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.ALL})
-    @JsonIgnore//@JsonBackReference(value="image-user")
+    //@JsonIgnore@JsonBackReference(value="image-user")
     private List<ImageEntity> images = new ArrayList<>();
     
     public UserEntity() {
