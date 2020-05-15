@@ -5,9 +5,14 @@
  */
 package net.ausiasmarch.api;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import javax.servlet.ServletContext;
 import net.ausiasmarch.entity.CategoryEntity;
 import net.ausiasmarch.entity.ImageEntity;
 import net.ausiasmarch.entity.LikeEntity;
@@ -16,6 +21,8 @@ import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.specific.ImageService;
 import net.ausiasmarch.service.implementation.specific.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +53,11 @@ public class ImageController {
     @Autowired
     private StorageService storageService;
 
+    @Autowired
+    private ServletContext servletContext;
+
+    List<String> files = new ArrayList<String>();
+
     @GetMapping("/{id}")
     public ResponseEntity<ImageEntity> get(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>((ImageEntity) oImageService.get(id), HttpStatus.OK);
@@ -55,19 +67,19 @@ public class ImageController {
     public ResponseEntity<List<ImageEntity>> get() {
         return new ResponseEntity<>(oImageService.getall(), HttpStatus.OK);
     }
-    
+
     @GetMapping("/popular/{page}/{rpp}")
     public ResponseEntity<List<ImageEntity>> popular(@PathVariable(value = "page") int page,
-            @PathVariable(value = "rpp") int rpp) {      
-         Pageable oPageable = PageRequest.of(page, rpp);
+            @PathVariable(value = "rpp") int rpp) {
+        Pageable oPageable = PageRequest.of(page, rpp);
         return new ResponseEntity<>(oImageService.popular(oPageable), HttpStatus.OK);
     }
-    
+
     @GetMapping("/imageslikes/{user}")
-    public ResponseEntity<List<ImageEntity>> imageslikes(@PathVariable(value = "user") int user_id) { 
+    public ResponseEntity<List<ImageEntity>> imageslikes(@PathVariable(value = "user") int user_id) {
         return new ResponseEntity<>(oImageService.imageslikes(user_id), HttpStatus.OK);
     }
-    
+
     @GetMapping("/favourite/{user}")
     public ResponseEntity<List<ImageEntity>> favourite(@PathVariable(value = "user") int user_id) {
         return new ResponseEntity<>(oImageService.favourite(user_id), HttpStatus.OK);
@@ -77,11 +89,17 @@ public class ImageController {
     public ResponseEntity<List<ImageEntity>> myimages(@PathVariable(value = "user") int user_id) {
         return new ResponseEntity<>(oImageService.myimages(user_id), HttpStatus.OK);
     }
-    
+
     @GetMapping("/count")
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(oImageService.count(), HttpStatus.OK);
     }
+    
+    @GetMapping("/count/{id}")
+    public ResponseEntity<Integer> count(@PathVariable(value = "id") int image_id) {
+        return new ResponseEntity<>(oImageService.countLikes(image_id), HttpStatus.OK);
+    }
+
     //Imagenes recientes
     @GetMapping("/getpage/{page}/{rpp}")
     public ResponseEntity<Page<ImageEntity>> getPage(
@@ -89,11 +107,22 @@ public class ImageController {
             @PathVariable(value = "rpp") int rpp,
             @RequestParam("sort") Optional<String> sort) {
         Pageable oPageable;
-         oPageable = PageRequest.of(page, rpp, Sort.by(Order.desc("date")));    
+        oPageable = PageRequest.of(page, rpp, Sort.by(Order.desc("date")));
         return new ResponseEntity<>(oImageService.getPage(oPageable), HttpStatus.OK);
     }
-    
-     @GetMapping("/")
+
+    //Imagenes usuarios
+    @GetMapping("/getpage/{page}/{rpp}/{user_id}")
+    public ResponseEntity<List<ImageEntity>> getPageImgFollows(
+            @PathVariable(value = "page") int page,
+            @PathVariable(value = "rpp") int rpp,
+            @PathVariable(value = "user_id") int user_id) {
+        Pageable oPageable;
+        oPageable = PageRequest.of(page, rpp, Sort.by(Order.desc("date")));
+        return new ResponseEntity<>(oImageService.getPageImgFollows(oPageable, user_id), HttpStatus.OK);
+    }
+
+    @GetMapping("/")
     public ResponseEntity<List<ImageEntity>> findFilter(@RequestParam Optional<String> title) {
         return new ResponseEntity<>(oImageService.findFilter(title.orElse("_")), HttpStatus.OK);
     }
@@ -103,28 +132,36 @@ public class ImageController {
         return new ResponseEntity<>(oImageService.delete(id), HttpStatus.OK);
     }
 
-    @PostMapping("/") // @RequestParam para uso parametro a parametro
+    @PostMapping("/") 
     public ResponseEntity<ImageEntity> create(@RequestBody ImageEntity oImageEntity) {
         return new ResponseEntity<>((ImageEntity) oImageService.create(oImageEntity), HttpStatus.OK);
     }
 
-    @PutMapping("/") // @RequestParam para uso parametro a parametro
+    @PutMapping("/") 
     public ResponseEntity<ImageEntity> update(@RequestBody ImageEntity oImageEntity) {
         return new ResponseEntity<>((ImageEntity) oImageService.update(oImageEntity), HttpStatus.OK);
     }
 
-    @PostMapping("/like") // login
-    public ResponseEntity<LikeEntity> like(@RequestBody LikeId mParametros) {    
+    @PostMapping("/like") //LIKES
+    public ResponseEntity<LikeEntity> like(@RequestBody LikeId mParametros) {
         Integer usuario_id = mParametros.getUser_id();
         Integer image_id = mParametros.getImage_id();
-        return new ResponseEntity<>(oImageService.like(usuario_id,image_id), HttpStatus.OK);
+        return new ResponseEntity<>(oImageService.like(usuario_id, image_id), HttpStatus.OK);
     }
 
-    @PostMapping("/upload")     
-    public ResponseEntity<Boolean> upload(@RequestParam("file") MultipartFile file) throws Exception { 
-         return new ResponseEntity<>( storageService.uploadFile(file), HttpStatus.OK);
+    @PostMapping("/upload") //UPLOAD 
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) throws Exception {
+        return new ResponseEntity<>(storageService.uploadFile(file), HttpStatus.OK);
     }
     
+    @GetMapping("/img/{image}")
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable(value = "image") String image) throws IOException {
+        ClassPathResource imgFile = new ClassPathResource("image\\" + image);
+        return ResponseEntity
+                .ok() 
+                .body(new InputStreamResource(imgFile.getInputStream()));
+    }
+
     @GetMapping("/getall/{category_id}")
     public ResponseEntity<List<ImageEntity>> getAllByCategory(@PathVariable(value = "category_id") Integer category_id) {
         return new ResponseEntity<>(oImageService.getAllByCategory(category_id), HttpStatus.OK);
@@ -190,16 +227,16 @@ public class ImageController {
 
         for (int i = 0; number > i; i++) {
             ImageEntity oImageEntity = new ImageEntity();
-            CategoryEntity oCategoryEntity = new CategoryEntity();           
+            CategoryEntity oCategoryEntity = new CategoryEntity();
             oCategoryEntity.setId((int) Math.floor(Math.random() * 5) + 1);
             UserEntity oUserEntity = new UserEntity();
             oUserEntity.setId((int) Math.floor(Math.random() * 10) + 2);
-            
+
             String tituloImage = title[(int) (Math.random() * title.length) + 0]; //image
             String path = imagenes[(int) (Math.random() * imagenes.length) + 0]; //image
             String desc = description[(int) (Math.random() * description.length) + 0]; //image
             String tag = tags[(int) (Math.random() * tags.length) + 0]; //image   
-                    
+
             oImageEntity.setImage(path);
             oImageEntity.setTitle(tituloImage);
             oImageEntity.setDescription(desc);
@@ -209,7 +246,7 @@ public class ImageController {
             oImageEntity.setIs_reported(false);
             oImageEntity.setCategory(oCategoryEntity);
             oImageEntity.setUser(oUserEntity);
-                    
+
             oImageService.create(oImageEntity);
         }
         return new ResponseEntity<>("Se han añadido correctamente", HttpStatus.OK);

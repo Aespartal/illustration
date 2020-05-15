@@ -8,56 +8,79 @@ package net.ausiasmarch.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 
 @Entity
-@Table(name = "message")
+@Table(name = "chat")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class MessageEntity implements Serializable {
-    
-    @EmbeddedId
-    private MessageKey id;
-    
-    @ManyToOne 
-    @MapsId("to_id")
+public class MessageEntity implements Serializable, GenericEntityInterface {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "to_user", referencedColumnName = "id")
     private UserEntity to;
-    @ManyToOne 
-    @MapsId("from_id")
-    @JsonIgnore//@JsonManagedReference
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "from_user", referencedColumnName = "id")
     private UserEntity from;
-    
+
     private String body;
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date date;
 
     public MessageEntity() {
     }
 
-    public MessageKey getId() {
+    public MessageEntity(UserEntity to, UserEntity from, String body, Date date) {
+        this.to = to;
+        this.from = from;
+        this.body = body;
+        this.date = date;
+    }
+
+    @Override
+    public Integer getId() {
         return id;
     }
 
-    public void setId(MessageKey id) {
+    @Override
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public UserEntity getTo_id() {
+    public UserEntity getTo() {
         return to;
     }
 
-    public void setTo_id(UserEntity to) {
+    public void setTo(UserEntity to) {
         this.to = to;
     }
 
-    public UserEntity getFrom_id() {
+    public UserEntity getFrom() {
         return from;
     }
 
-    public void setFrom_id(UserEntity from) {
+    public void setFrom(UserEntity from) {
         this.from = from;
     }
 
@@ -68,6 +91,14 @@ public class MessageEntity implements Serializable {
     public void setBody(String body) {
         this.body = body;
     }
-    
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     
 }

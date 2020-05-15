@@ -51,10 +51,25 @@ public class UserController {
     public ResponseEntity<List<UserEntity>> get() {
         return new ResponseEntity<>(oUserService.getall(), HttpStatus.OK);
     }
+    
+     @GetMapping("/getuserschat/{user_id}")
+    public ResponseEntity<List<UserEntity>> getUsersChat(@PathVariable(value = "user_id") int user_id) {
+        return new ResponseEntity<>(oUserService.getUsersChat(user_id), HttpStatus.OK);
+    }
 
     @GetMapping("/count")
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(oUserService.count(), HttpStatus.OK);
+    }
+    
+    @GetMapping("/countfolloweds/{user_id}")
+    public ResponseEntity<Integer> countFolloweds(@PathVariable(value = "user_id") int user_id) {
+        return new ResponseEntity<>(oUserService.countFolloweds(user_id), HttpStatus.OK);
+    }
+
+    @GetMapping("/countfollowers/{user_id}")
+    public ResponseEntity<Integer> countFollowers(@PathVariable(value = "user_id") int user_id) {
+        return new ResponseEntity<>(oUserService.countFollowers(user_id), HttpStatus.OK);
     }
 
     @GetMapping("/getpage/{page}/{rpp}")

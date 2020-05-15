@@ -27,10 +27,10 @@ public class SessionController {
 
     @Autowired
     UserService oUserService;
+   
 
     @GetMapping("/") // check
     public ResponseEntity<UserEntity> check() {
-        System.out.println(oSession.getAttribute("username"));
         return new ResponseEntity<UserEntity>((UserEntity) oSession.getAttribute("username"), HttpStatus.OK);
     }
 

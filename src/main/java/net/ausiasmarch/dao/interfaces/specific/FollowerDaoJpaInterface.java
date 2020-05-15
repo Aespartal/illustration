@@ -17,8 +17,17 @@ import org.springframework.data.repository.query.Param;
  * @author espar
  */
 public interface FollowerDaoJpaInterface extends JpaRepository<FollowerEntity, String> {
-        @Query(value="SELECT user_id,friend_id FROM follower WHERE user_id=:user_id AND friend_id=:friend_id",nativeQuery=true)
+    
+    @Query(value="SELECT user_id,friend_id FROM follower WHERE user_id=:user_id AND friend_id=:friend_id",nativeQuery=true)
     FollowerEntity findFollower(@Param("user_id")Integer user_id,@Param("friend_id")Integer friend_id);
+    
+    //Count de las personas a las que sigo
+    @Query(value="SELECT COUNT(f.friend_id) FROM follower f WHERE f.user_id=:user_id",nativeQuery=true)
+    Integer countFolloweds(@Param("user_id")Integer user_id);
+    
+    //Count de mis seguigores
+    @Query(value="SELECT COUNT(*) FROM follower WHERE friend_id=:user_id",nativeQuery=true)
+    Integer countFollowers(@Param("user_id")Integer user_id);
     
     @Transactional
     @Modifying(clearAutomatically = false)

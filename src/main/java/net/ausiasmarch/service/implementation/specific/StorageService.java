@@ -9,30 +9,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class StorageService {
 
-    private final String fileBasePath = "C:\\xampp\\htdocs\\illustration-client\\src\\assets\\images\\";
-
+    private final Path rootLocation = Paths.get("src\\main\\resources\\image");
+    
     public Boolean uploadFile(MultipartFile file) throws Exception {
-        Boolean state = false;
-
-	String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-	Path path = Paths.get(fileBasePath + fileName);
-        
-	try {
-            if(Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING)!=0){
-                state = true;
-            }          
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-
+        Boolean state;
+        try {
+            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+            state = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            state = false;
+        }
         return state;
     }
+
 }

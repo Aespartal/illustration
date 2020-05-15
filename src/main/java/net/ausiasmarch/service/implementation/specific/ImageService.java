@@ -1,12 +1,14 @@
 package net.ausiasmarch.service.implementation.specific;
 
 import java.util.List;
+import java.util.Optional;
 import net.ausiasmarch.dao.implementation.specific.ImageDao;
 import net.ausiasmarch.entity.ImageEntity;
 import net.ausiasmarch.entity.LikeEntity;
 import net.ausiasmarch.service.implementation.generic.GenericServiceImplementation;
 import net.ausiasmarch.service.interfaces.generic.GenericServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,10 @@ public class ImageService extends GenericServiceImplementation implements Generi
 
     public List<ImageEntity> popular(Pageable pageable) {
         return oImageDao.popular(pageable);
+    }
+    
+    public Integer countLikes(int image_id){
+         return oImageDao.countLikes(image_id);
     }
     
     public List<ImageEntity> imageslikes(int user_id) {
@@ -53,5 +59,10 @@ public class ImageService extends GenericServiceImplementation implements Generi
     public List<ImageEntity> getAllByCategory(Integer category_id) {
         return oImageDao.getAllByCategory(category_id);
     }
+    
+     public List<ImageEntity> getPageImgFollows(Pageable oPageable, Integer user_id) {
+        return oImageDao.getPageImgFollows(oPageable, user_id);
+    }
+
 
 }

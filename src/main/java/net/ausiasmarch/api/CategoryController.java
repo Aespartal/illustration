@@ -6,8 +6,9 @@
 package net.ausiasmarch.api;
 
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import net.ausiasmarch.entity.CategoryEntity;
-import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
+import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.specific.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,48 +26,68 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials= "true")
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
-    	@Autowired
-	CategoryService oCategoryService;
 
-	@GetMapping("/{id}")
-	public ResponseEntity<CategoryEntity> get(@PathVariable(value = "id") int id) {
-		return new ResponseEntity<>((CategoryEntity) oCategoryService.get(id), HttpStatus.OK);
-	}
+    @Autowired
+    CategoryService oCategoryService;
 
-	@GetMapping("/getall")
-	public ResponseEntity<List<CategoryEntity>> get() {
-		return new ResponseEntity<>(oCategoryService.getall(), HttpStatus.OK);
-	}
+    @Autowired
+    HttpSession oSession;
 
-	@GetMapping("/count")
-	public ResponseEntity<Long> count() {
-		return new ResponseEntity<>(oCategoryService.count(), HttpStatus.OK);
-	}
+    @GetMapping("/{id}")
+    public ResponseEntity<?> get(@PathVariable(value = "id") int id) {
+        return new ResponseEntity<>((CategoryEntity) oCategoryService.get(id), HttpStatus.OK);
+    }
 
-	@GetMapping("/getpage/{page}/{rpp}")
-	public ResponseEntity<Page<CategoryEntity>> getPage(@PathVariable(value = "page") int page,
-			@PathVariable(value = "rpp") int rpp) {
-		Pageable oPageable;
-		oPageable = PageRequest.of(page, rpp);
-		return new ResponseEntity<>(oCategoryService.getPage(oPageable), HttpStatus.OK);
-	}
+    @GetMapping("/getall")
+    public ResponseEntity<List<CategoryEntity>> get() {
+        return new ResponseEntity<>(oCategoryService.getall(), HttpStatus.OK);
+    }
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Boolean> delete(@PathVariable(value = "id") int id) {
-		return new ResponseEntity<>(oCategoryService.delete(id), HttpStatus.OK);
-	}
+    @GetMapping("/count")
+    public ResponseEntity<Long> count() {
+        return new ResponseEntity<>(oCategoryService.count(), HttpStatus.OK);
+    }
 
-	@PostMapping("/") // @RequestParam para uso parametro a parametro
-	public ResponseEntity<CategoryEntity> create(@RequestBody CategoryEntity oCategoryEntity) {
-		return new ResponseEntity<>((CategoryEntity) oCategoryService.create(oCategoryEntity), HttpStatus.OK);
-	}
+    @GetMapping("/getpage/{page}/{rpp}")
+    public ResponseEntity<Page<CategoryEntity>> getPage(@PathVariable(value = "page") int page,
+            @PathVariable(value = "rpp") int rpp) {
+        Pageable oPageable;
+        oPageable = PageRequest.of(page, rpp);
+        return new ResponseEntity<>(oCategoryService.getPage(oPageable), HttpStatus.OK);
+    }
 
-	@PutMapping("/") // @RequestParam para uso parametro a parametro
-	public ResponseEntity<CategoryEntity> update(@RequestBody CategoryEntity oCategoryEntity) {
-		return new ResponseEntity<>((CategoryEntity) oCategoryService.update(oCategoryEntity), HttpStatus.OK);
-	}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable(value = "id") int id) {
+        if (this.user() == null || !this.user().getRole().getId().equals(1)) {
+            return new ResponseEntity<>("Not authorized", HttpStatus.UNAUTHORIZED);
+        } else {
+            return new ResponseEntity<>(oCategoryService.delete(id), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/") // @RequestParam para uso parametro a parametro
+    public ResponseEntity<?> create(@RequestBody CategoryEntity oCategoryEntity) {
+        if (this.user() == null || !this.user().getRole().getId().equals(1)) {
+            return new ResponseEntity<>("Not authorized", HttpStatus.UNAUTHORIZED);
+        } else {
+            return new ResponseEntity<>((CategoryEntity) oCategoryService.create(oCategoryEntity), HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/") // @RequestParam para uso parametro a parametro
+    public ResponseEntity<?> update(@RequestBody CategoryEntity oCategoryEntity) {
+        if (this.user() == null || !this.user().getRole().getId().equals(1)) {
+            return new ResponseEntity<>("Not authorized", HttpStatus.UNAUTHORIZED);
+        } else {
+            return new ResponseEntity<>((CategoryEntity) oCategoryService.update(oCategoryEntity), HttpStatus.OK);
+        }
+    }
+
+    public UserEntity user() {
+        return (UserEntity) oSession.getAttribute("username");
+    }
 }

@@ -1,5 +1,6 @@
 package net.ausiasmarch.dao.implementation.specific;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import net.ausiasmarch.dao.implementation.generic.GenericDaoImplementation;
@@ -52,5 +53,17 @@ public class UserDao extends GenericDaoImplementation<GenericEntityInterface> im
          public void follow(Integer user_id, Integer friend_id){
              oFollowRepository.follow(user_id,friend_id);
          
+        }
+         
+        public Integer countFolloweds(Integer user_id){
+          return oFollowRepository.countFolloweds(user_id);
+        }
+        
+         public Integer countFollowers(Integer user_id){
+          return oFollowRepository.countFollowers(user_id);
+        }
+         
+        public List<UserEntity> getUsersChat(Integer user_id){
+            return oUserRepository.getUsersChat(user_id);
         }
 }

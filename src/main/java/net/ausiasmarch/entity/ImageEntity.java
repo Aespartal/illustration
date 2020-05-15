@@ -34,7 +34,8 @@ import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 @Table(name = "image")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ImageEntity implements Serializable, GenericEntityInterface {
-      @Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String image;
@@ -45,17 +46,17 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
     private String tags;
     private Boolean is_private;
     private Boolean is_reported;
-    
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
     //------------------------------------
-    
-     @ManyToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserEntity user;
     //------------------------------------
-     
+
     @ManyToMany(
             mappedBy = "image",
             cascade = {CascadeType.ALL})
@@ -63,20 +64,21 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
     private List<ImageEntity> likes = new ArrayList<>(); //MANY TO MENY con ImageEntity
     //-----------------------------------
     @OneToMany(
-        mappedBy = "image",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true
+            mappedBy = "image",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     @JsonIgnore
     private List<CommentEntity> comments = new ArrayList<CommentEntity>();
 
     public ImageEntity() {
     }
-    
+
     @Override
     public Integer getId() {
         return id;
     }
+
     @Override
     public void setId(Integer id) {
         this.id = id;
@@ -86,7 +88,6 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
         return image;
     }
 
-    
     public void setImage(String image) {
         this.image = image;
     }
@@ -146,8 +147,7 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
     public void setCategory(CategoryEntity category) {
         this.category = category;
     }
-    
-    
+
     public UserEntity getUser() {
         return user;
     }
@@ -171,11 +171,9 @@ public class ImageEntity implements Serializable, GenericEntityInterface {
     public void setComments(List<CommentEntity> comments) {
         this.comments = comments;
     }
-    
+
     public String getField(String filter) {
         return filter.matches("id|title|description|date|tags") ? filter : null;
     }
 
-    
-    
 }

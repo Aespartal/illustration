@@ -6,6 +6,7 @@
 package net.ausiasmarch.dao.interfaces.specific;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javafx.util.Pair;
 import javax.transaction.Transactional;
 import net.ausiasmarch.entity.ImageEntity;
@@ -40,4 +41,13 @@ public interface ImageDaoJpaInterface extends JpaRepository<ImageEntity, String>
     
     @Query(value="SELECT i.* FROM image i, user u WHERE i.user_id = :user_id GROUP BY i.id",nativeQuery=true)
     List<ImageEntity> myimages(Integer user_id);
+    
+    //IMAGENES DE LOS SEGUIDORES
+    @Query(value="SELECT i.* FROM image i, user u, follower f WHERE i.user_id = f.friend_id AND f.user_id = :user_id GROUP BY i.id limit :offset, :pageSize",nativeQuery=true)
+    List<ImageEntity> getPageImgFollows(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize, Integer user_id);
+    
+    //Likes de una imagen
+    @Query(value="SELECT count(*) FROM like_image u WHERE u.image_id = :image_id",nativeQuery=true)
+    Integer countLikes(Integer image_id);
+    
 }

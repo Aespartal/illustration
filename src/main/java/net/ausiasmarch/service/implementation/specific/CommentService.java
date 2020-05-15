@@ -10,15 +10,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CommentService extends GenericServiceImplementation implements GenericServiceInterface {
+
     @Autowired
     protected CommentDao oCommentDao;
-    
+
     @Autowired
     public CommentService(CommentDao oCommentDao) {
         super(oCommentDao);
     }
 
-    public List<CommentEntity> getcomments(Integer id){
+    public List<CommentEntity> getcomments(Integer id) {
         return oCommentDao.getcomments(id);
+    }
+
+    public CommentEntity getCommentByUser_id(Integer id, Integer user_id) {
+        return oCommentDao.getCommentByUser_id(id, user_id);
+    }
+    
+    public Integer countComments(int image_id) {
+        return oCommentDao.countComments(image_id);
     }
 }
