@@ -11,6 +11,7 @@ import net.ausiasmarch.dao.interfaces.specific.UserDaoJpaInterface;
 import net.ausiasmarch.entity.FollowerEntity;
 import net.ausiasmarch.entity.FollowerId;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 public class UserDao extends GenericDaoImplementation<GenericEntityInterface> implements GenericDaoInterface<GenericEntityInterface> {
@@ -66,4 +67,12 @@ public class UserDao extends GenericDaoImplementation<GenericEntityInterface> im
         public List<UserEntity> getUsersChat(Integer user_id){
             return oUserRepository.getUsersChat(user_id);
         }
+        
+         public List<UserEntity> getFolloweds(Pageable oPageable, Integer user_id){
+            return oUserRepository.getFolloweds(oPageable.getPageNumber(), oPageable.getPageSize(), user_id);
+        }
+         public List<UserEntity> getFollowers(Pageable oPageable, Integer user_id){
+            return oUserRepository.getFollowers(oPageable.getPageNumber(), oPageable.getPageSize(), user_id);
+        }
+        
 }

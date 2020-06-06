@@ -7,6 +7,7 @@ package net.ausiasmarch.dao.interfaces.specific;
 
 import javax.transaction.Transactional;
 import net.ausiasmarch.entity.FollowerEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,4 +39,5 @@ public interface FollowerDaoJpaInterface extends JpaRepository<FollowerEntity, S
     @Modifying(clearAutomatically = false)
     @Query(value="INSERT INTO follower (user_id, friend_id) VALUES (:user_id, :friend_id)",nativeQuery=true)
     void follow(@Param("user_id")Integer user_id,@Param("friend_id")Integer friend_id);
+    
 }

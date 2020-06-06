@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import javax.servlet.http.HttpSession;
 import net.ausiasmarch.entity.FollowerEntity;
 import net.ausiasmarch.entity.FollowerId;
 import net.ausiasmarch.entity.RolEntity;
@@ -36,6 +37,9 @@ public class UserController {
 
     @Autowired
     UserService oUserService;
+    
+    @Autowired
+    HttpSession oSession;
 
     @GetMapping("/{id}")
     public ResponseEntity<UserEntity> get(@PathVariable(value = "id") int id) {
@@ -79,6 +83,24 @@ public class UserController {
         oPageable = PageRequest.of(page, rpp);
         return new ResponseEntity<>(oUserService.getPage(oPageable), HttpStatus.OK);
     }
+    //Los que sigue al usuario
+    @GetMapping("/getfollowers/{page}/{rpp}/{id}")
+    public ResponseEntity<List<UserEntity>> getFolloweds(@PathVariable(value = "page") int page,
+            @PathVariable(value = "rpp") int rpp,
+            @PathVariable(value = "id") int user_id) {
+        Pageable oPageable;
+        oPageable = PageRequest.of(page, rpp);
+        return new ResponseEntity<>(oUserService.getFolloweds(oPageable, user_id), HttpStatus.OK);
+    }
+    //Los que el usuario sigue
+     @GetMapping("/getfolloweds/{page}/{rpp}/{id}")
+    public ResponseEntity<List<UserEntity>> getfollowers(@PathVariable(value = "page") int page,
+            @PathVariable(value = "rpp") int rpp,
+            @PathVariable(value = "id") int user_id) {
+        Pageable oPageable;
+        oPageable = PageRequest.of(page, rpp); 
+        return new ResponseEntity<>(oUserService.getFollowers(oPageable, user_id), HttpStatus.OK);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable(value = "id") int id) {
@@ -111,6 +133,10 @@ public class UserController {
     public ResponseEntity<Boolean> findfollow(@PathVariable(value = "user_id") Integer user_id,
             @PathVariable(value = "friend_id") Integer friend_id) {
         return new ResponseEntity<>(oUserService.findFollow(user_id, friend_id), HttpStatus.OK);
+    }
+    
+     public UserEntity user() {
+        return (UserEntity) oSession.getAttribute("username");
     }
 
     @PostMapping("/fill/{number}")

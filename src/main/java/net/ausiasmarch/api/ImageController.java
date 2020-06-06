@@ -100,7 +100,6 @@ public class ImageController {
         return new ResponseEntity<>(oImageService.countLikes(image_id), HttpStatus.OK);
     }
 
-    //Imagenes recientes
     @GetMapping("/getpage/{page}/{rpp}")
     public ResponseEntity<Page<ImageEntity>> getPage(
             @PathVariable(value = "page") int page,
@@ -111,7 +110,6 @@ public class ImageController {
         return new ResponseEntity<>(oImageService.getPage(oPageable), HttpStatus.OK);
     }
 
-    //Imagenes usuarios
     @GetMapping("/getpage/{page}/{rpp}/{user_id}")
     public ResponseEntity<List<ImageEntity>> getPageImgFollows(
             @PathVariable(value = "page") int page,

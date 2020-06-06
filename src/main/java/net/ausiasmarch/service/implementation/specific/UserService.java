@@ -12,6 +12,7 @@ import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.generic.GenericServiceImplementation;
 import net.ausiasmarch.service.interfaces.generic.GenericServiceInterface;
 import net.ausiasmarch.service.interfaces.specific.UserServiceInterface;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class UserService extends GenericServiceImplementation implements GenericServiceInterface, UserServiceInterface {
@@ -50,7 +51,7 @@ public class UserService extends GenericServiceImplementation implements Generic
 
     public Boolean findFollow(Integer user_id, Integer friend_id) {
         Boolean f = false;
-        
+
         if (oUserDao.findFollower(user_id, friend_id) != null) {
             f = true;
         } else {
@@ -70,5 +71,13 @@ public class UserService extends GenericServiceImplementation implements Generic
 
     public List<UserEntity> getUsersChat(Integer user_id) {
         return oUserDao.getUsersChat(user_id);
+    }
+
+    public List<UserEntity> getFolloweds(Pageable oPageable, int user_id) {
+        return oUserDao.getFolloweds(oPageable, user_id);
+    }
+    
+    public List<UserEntity> getFollowers(Pageable oPageable, int user_id) {
+        return oUserDao.getFollowers(oPageable, user_id);
     }
 }
