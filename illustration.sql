@@ -131,17 +131,6 @@ CREATE TABLE `like_image` (
   `image_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `message`
---
-
-CREATE TABLE `message` (
-  `to_id` int(11) NOT NULL,
-  `from_id` int(11) NOT NULL,
-  `body` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -248,13 +237,6 @@ ALTER TABLE `like_image`
   ADD KEY `image_id` (`image_id`);
 
 --
--- Indices de la tabla `message`
---
-ALTER TABLE `message`
-  ADD PRIMARY KEY (`to_id`,`from_id`),
-  ADD KEY `fk_Usuario_has_Usuario3` (`from_id`);
-
---
 -- Indices de la tabla `role`
 --
 ALTER TABLE `role`
@@ -332,13 +314,6 @@ ALTER TABLE `image`
 ALTER TABLE `like_image`
   ADD CONSTRAINT `like_image_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`),
   ADD CONSTRAINT `like_image_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Filtros para la tabla `message`
---
-ALTER TABLE `message`
-  ADD CONSTRAINT `fk_Usuario_has_Usuario2` FOREIGN KEY (`to_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Usuario_has_Usuario3` FOREIGN KEY (`from_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `user`

@@ -5,11 +5,7 @@
  */
 package net.ausiasmarch.dao.implementation.specific;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javafx.util.Pair;
 import net.ausiasmarch.dao.implementation.generic.GenericDaoImplementation;
 import net.ausiasmarch.dao.interfaces.generic.GenericDaoInterface;
 import net.ausiasmarch.dao.interfaces.specific.ImageDaoJpaInterface;
@@ -19,7 +15,6 @@ import net.ausiasmarch.entity.LikeEntity;
 import net.ausiasmarch.entity.LikeId;
 import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 

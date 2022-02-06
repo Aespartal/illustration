@@ -41,8 +41,6 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     private String username;
     private String password;
     private String email;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date birthdate;
     @Column(columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean is_private;
@@ -90,10 +88,6 @@ public class UserEntity implements Serializable, GenericEntityInterface {
    @JsonIgnore//@JsonBackReference
     private Set<CommentEntity> comments = new HashSet<CommentEntity>();
     
-    @OneToMany(fetch = FetchType.LAZY,mappedBy="to", cascade = {CascadeType.ALL})
-    @JsonIgnore//@JsonBackReference
-    private Set<MessageEntity> messages = new HashSet<MessageEntity>();
-    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.ALL})
     //@JsonIgnore@JsonBackReference(value="image-user")
     private List<ImageEntity> images = new ArrayList<>();
@@ -118,14 +112,6 @@ public class UserEntity implements Serializable, GenericEntityInterface {
 
     public String getUsername() {
         return username;
-    }
-
-    public Date getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
     }
 
     public RolEntity getRole() {
@@ -268,13 +254,6 @@ public class UserEntity implements Serializable, GenericEntityInterface {
         this.comments = comments;
     }
 
-    public Set<MessageEntity> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(Set<MessageEntity> messages) {
-        this.messages = messages;
-    }
 
     @JsonIgnore
     public List<ImageEntity> getImages() {

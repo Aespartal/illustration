@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.specific.UserService;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
@@ -186,7 +185,6 @@ public class UserController {
             oUserEntity.setDescription(description);
             oUserEntity.setToken(token);
             oUserEntity.setDate_register(new java.sql.Date(new java.util.Date().getTime()));
-            oUserEntity.setBirthdate(random);
             oUserEntity.setImg_profile(img);
             oUserEntity.setImg_cover(img_cover);
             oUserEntity.setIs_private(false);

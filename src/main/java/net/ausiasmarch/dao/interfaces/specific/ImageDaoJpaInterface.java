@@ -5,16 +5,8 @@
  */
 package net.ausiasmarch.dao.interfaces.specific;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javafx.util.Pair;
-import javax.transaction.Transactional;
 import net.ausiasmarch.entity.ImageEntity;
-import net.ausiasmarch.entity.LikeEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
