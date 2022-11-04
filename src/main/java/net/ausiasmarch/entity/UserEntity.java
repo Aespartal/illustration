@@ -45,7 +45,7 @@ public class UserEntity implements Serializable, GenericEntityInterface {
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean is_private;
     private String description;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date date_register;
     private String img_profile;
     private String img_cover;

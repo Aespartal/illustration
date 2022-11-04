@@ -6,6 +6,7 @@
 package net.ausiasmarch.api;
 
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpSession;
 import net.ausiasmarch.entity.CategoryEntity;
 import net.ausiasmarch.entity.UserEntity;
@@ -62,7 +63,7 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(value = "id") int id) {
-        if (this.user() == null || !this.user().getRole().getId().equals(1)) {
+        if (!user().isPresent() || user().get().getId().equals(1)) {
             return new ResponseEntity<>("Not authorized", HttpStatus.UNAUTHORIZED);
         } else {
             return new ResponseEntity<>(oCategoryService.delete(id), HttpStatus.OK);
@@ -71,7 +72,7 @@ public class CategoryController {
 
     @PostMapping("/") // @RequestParam para uso parametro a parametro
     public ResponseEntity<?> create(@RequestBody CategoryEntity oCategoryEntity) {
-        if (this.user() == null || !this.user().getRole().getId().equals(1)) {
+        if (!user().isPresent() || user().get().getId().equals(1)) {
             return new ResponseEntity<>("Not authorized", HttpStatus.UNAUTHORIZED);
         } else {
             return new ResponseEntity<>((CategoryEntity) oCategoryService.create(oCategoryEntity), HttpStatus.OK);
@@ -80,14 +81,14 @@ public class CategoryController {
 
     @PutMapping("/") // @RequestParam para uso parametro a parametro
     public ResponseEntity<?> update(@RequestBody CategoryEntity oCategoryEntity) {
-        if (this.user() == null || !this.user().getRole().getId().equals(1)) {
+        if (!user().isPresent() || !user().get().getRole().getId().equals(1)) {
             return new ResponseEntity<>("Not authorized", HttpStatus.UNAUTHORIZED);
         } else {
             return new ResponseEntity<>((CategoryEntity) oCategoryService.update(oCategoryEntity), HttpStatus.OK);
         }
     }
 
-    public UserEntity user() {
-        return (UserEntity) oSession.getAttribute("username");
+    public Optional<UserEntity> user() {
+        return (Optional<UserEntity>) oSession.getAttribute("username");
     }
 }

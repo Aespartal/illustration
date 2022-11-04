@@ -1,9 +1,11 @@
 package net.ausiasmarch.api;
 
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
+import net.ausiasmarch.entity.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +32,8 @@ public class SessionController {
    
 
     @GetMapping("/") // check
-    public ResponseEntity<UserEntity> check() {
-        return new ResponseEntity<UserEntity>((UserEntity) oSession.getAttribute("username"), HttpStatus.OK);
+    public ResponseEntity<UserDTO> check() {
+        return new ResponseEntity(oSession.getAttribute("username"), HttpStatus.OK);
     }
 
     @DeleteMapping("/") // logout
@@ -41,9 +43,9 @@ public class SessionController {
     }
 
     @PostMapping("/") // login
-    public ResponseEntity<UserEntity> login(@RequestBody Map<String, String> mParametros) {
+    public ResponseEntity<UserDTO> login(@RequestBody Map<String, String> mParametros) {
         oSession.setAttribute("username", oUserService.login(mParametros));
-        return new ResponseEntity<UserEntity>((UserEntity) oSession.getAttribute("username"), HttpStatus.OK);
+        return new ResponseEntity(oSession.getAttribute("username"), HttpStatus.OK);
     }
 
 }
