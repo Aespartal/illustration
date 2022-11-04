@@ -1,9 +1,7 @@
 package net.ausiasmarch.api;
 
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,41 +18,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ausiasmarch.entity.RolEntity;
-import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.specific.RoleService;
-import org.springframework.context.annotation.Scope;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 @RestController
-@RequestMapping("/role")
-public class RoleController {
+@RequestMapping("/api")
+public class RoleResource {
 
-    @Autowired
-    RoleService oRoleService;
+    private final RoleService oRoleService;
 
-    @Autowired
-    HttpSession oSession;
+    public RoleResource(RoleService oRoleService) {
+        this.oRoleService = oRoleService;
+    }
 
-    @GetMapping("/{id}")
+    @GetMapping("/role/{id}")
     public ResponseEntity<RolEntity> get(@PathVariable(value = "id") int id) { 
         return new ResponseEntity<>((RolEntity) oRoleService.get(id), HttpStatus.OK);
     }
 
-    @GetMapping("/getall")
+    @GetMapping("/role/getall")
     public ResponseEntity<List<RolEntity>> get() {
         return new ResponseEntity<>(oRoleService.getall(), HttpStatus.OK);
     }
 
-    @GetMapping("/count")
+    @GetMapping("/role/count")
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(oRoleService.count(), HttpStatus.OK);
     }
 
-    @GetMapping("/getpage/{page}/{rpp}")
+    @GetMapping("/role/getpage/{page}/{rpp}")
     public ResponseEntity<Page<RolEntity>> getPage(@PathVariable(value = "page") int page,
             @PathVariable(value = "rpp") int rpp) {
         Pageable oPageable;
@@ -62,17 +54,17 @@ public class RoleController {
         return new ResponseEntity<>(oRoleService.getPage(oPageable), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/role/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>(oRoleService.delete(id), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping("/role")
     public ResponseEntity<RolEntity> create(@RequestBody RolEntity oRoleEntity) {
         return new ResponseEntity<>((RolEntity) oRoleService.create(oRoleEntity), HttpStatus.OK);
     }
 
-    @PutMapping("/")
+    @PutMapping("/role")
     public ResponseEntity<RolEntity> update(@RequestBody RolEntity oRoleEntity) {
         return new ResponseEntity<>((RolEntity) oRoleService.update(oRoleEntity), HttpStatus.OK);
     }

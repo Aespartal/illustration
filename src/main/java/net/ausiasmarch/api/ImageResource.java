@@ -6,8 +6,6 @@
 package net.ausiasmarch.api;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +18,6 @@ import net.ausiasmarch.entity.LikeId;
 import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.specific.ImageService;
 import net.ausiasmarch.service.implementation.specific.StorageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
@@ -44,63 +41,61 @@ import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 @RestController
-@RequestMapping("/image")
-public class ImageController {
+@RequestMapping("/api")
+public class ImageResource {
 
-    @Autowired
-    ImageService oImageService;
+    private final ImageService oImageService;
 
-    @Autowired
-    private StorageService storageService;
+    private final StorageService storageService;
 
-    @Autowired
-    private ServletContext servletContext;
+    public ImageResource(ImageService oImageService, StorageService storageService) {
+        this.oImageService = oImageService;
+        this.storageService = storageService;;
+    }
 
-    List<String> files = new ArrayList<String>();
-
-    @GetMapping("/{id}")
+    @GetMapping("/image/{id}")
     public ResponseEntity<ImageEntity> get(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>((ImageEntity) oImageService.get(id), HttpStatus.OK);
     }
 
-    @GetMapping("/getall")
+    @GetMapping("/image/getall")
     public ResponseEntity<List<ImageEntity>> get() {
         return new ResponseEntity<>(oImageService.getall(), HttpStatus.OK);
     }
 
-    @GetMapping("/popular/{page}/{rpp}")
+    @GetMapping("/image/popular/{page}/{rpp}")
     public ResponseEntity<List<ImageEntity>> popular(@PathVariable(value = "page") int page,
             @PathVariable(value = "rpp") int rpp) {
         Pageable oPageable = PageRequest.of(page, rpp);
         return new ResponseEntity<>(oImageService.popular(oPageable), HttpStatus.OK);
     }
 
-    @GetMapping("/imageslikes/{user}")
+    @GetMapping("/image/imageslikes/{user}")
     public ResponseEntity<List<ImageEntity>> imageslikes(@PathVariable(value = "user") int user_id) {
         return new ResponseEntity<>(oImageService.imageslikes(user_id), HttpStatus.OK);
     }
 
-    @GetMapping("/favourite/{user}")
+    @GetMapping("/image/favourite/{user}")
     public ResponseEntity<List<ImageEntity>> favourite(@PathVariable(value = "user") int user_id) {
         return new ResponseEntity<>(oImageService.favourite(user_id), HttpStatus.OK);
     }
 
-    @GetMapping("/myimages/{user}")
+    @GetMapping("/image/myimages/{user}")
     public ResponseEntity<List<ImageEntity>> myimages(@PathVariable(value = "user") int user_id) {
         return new ResponseEntity<>(oImageService.myimages(user_id), HttpStatus.OK);
     }
 
-    @GetMapping("/count")
+    @GetMapping("/image/count")
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(oImageService.count(), HttpStatus.OK);
     }
     
-    @GetMapping("/count/{id}")
+    @GetMapping("/image/count/{id}")
     public ResponseEntity<Integer> count(@PathVariable(value = "id") int image_id) {
         return new ResponseEntity<>(oImageService.countLikes(image_id), HttpStatus.OK);
     }
 
-    @GetMapping("/getpage/{page}/{rpp}")
+    @GetMapping("/image/getpage/{page}/{rpp}")
     public ResponseEntity<Page<ImageEntity>> getPage(
             @PathVariable(value = "page") int page,
             @PathVariable(value = "rpp") int rpp,
@@ -110,7 +105,7 @@ public class ImageController {
         return new ResponseEntity<>(oImageService.getPage(oPageable), HttpStatus.OK);
     }
 
-    @GetMapping("/getpage/{page}/{rpp}/{user_id}")
+    @GetMapping("/image/getpage/{page}/{rpp}/{user_id}")
     public ResponseEntity<List<ImageEntity>> getPageImgFollows(
             @PathVariable(value = "page") int page,
             @PathVariable(value = "rpp") int rpp,
@@ -120,39 +115,39 @@ public class ImageController {
         return new ResponseEntity<>(oImageService.getPageImgFollows(oPageable, user_id), HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @GetMapping("/image")
     public ResponseEntity<List<ImageEntity>> findFilter(@RequestParam Optional<String> title) {
         return new ResponseEntity<>(oImageService.findFilter(title.orElse("_")), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/image/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>(oImageService.delete(id), HttpStatus.OK);
     }
 
-    @PostMapping("/") 
+    @PostMapping("/image")
     public ResponseEntity<ImageEntity> create(@RequestBody ImageEntity oImageEntity) {
         return new ResponseEntity<>((ImageEntity) oImageService.create(oImageEntity), HttpStatus.OK);
     }
 
-    @PutMapping("/") 
+    @PutMapping("/image")
     public ResponseEntity<ImageEntity> update(@RequestBody ImageEntity oImageEntity) {
         return new ResponseEntity<>((ImageEntity) oImageService.update(oImageEntity), HttpStatus.OK);
     }
 
-    @PostMapping("/like") //LIKES
+    @PostMapping("/image/like") //LIKES
     public ResponseEntity<LikeEntity> like(@RequestBody LikeId mParametros) {
         Integer usuario_id = mParametros.getUser_id();
         Integer image_id = mParametros.getImage_id();
         return new ResponseEntity<>(oImageService.like(usuario_id, image_id), HttpStatus.OK);
     }
 
-    @PostMapping("/upload") //UPLOAD 
+    @PostMapping("/image/upload") //UPLOAD
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) throws Exception {
         return new ResponseEntity<>(storageService.uploadFile(file), HttpStatus.OK);
     }
     
-    @GetMapping("/img/{image}")
+    @GetMapping("/image/img/{image}")
     public ResponseEntity<InputStreamResource> getImage(@PathVariable(value = "image") String image) throws IOException {
         ClassPathResource imgFile = new ClassPathResource("image\\" + image);
         return ResponseEntity
@@ -160,12 +155,12 @@ public class ImageController {
                 .body(new InputStreamResource(imgFile.getInputStream()));
     }
 
-    @GetMapping("/getall/{category_id}")
+    @GetMapping("/image/getall/{category_id}")
     public ResponseEntity<List<ImageEntity>> getAllByCategory(@PathVariable(value = "category_id") Integer category_id) {
         return new ResponseEntity<>(oImageService.getAllByCategory(category_id), HttpStatus.OK);
     }
 
-    @PostMapping("/fill/{number}")
+    @PostMapping("/image/fill/{number}")
     public ResponseEntity<String>
             fill(@PathVariable(value = "number") int number) {
         String[] imagenes = {

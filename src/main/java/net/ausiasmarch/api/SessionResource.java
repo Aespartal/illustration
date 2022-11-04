@@ -1,7 +1,6 @@
 package net.ausiasmarch.api;
 
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,14 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import net.ausiasmarch.entity.UserEntity;
 import net.ausiasmarch.service.implementation.specific.UserService;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 @RestController
 @RequestMapping("/session")
-public class SessionController {
+public class SessionResource {
 
     @Autowired
     HttpSession oSession;

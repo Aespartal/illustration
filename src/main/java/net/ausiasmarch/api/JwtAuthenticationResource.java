@@ -5,30 +5,33 @@ import net.ausiasmarch.entity.JwtResponse;
 import net.ausiasmarch.jwt.JwtTokenUtil;
 import net.ausiasmarch.service.jwt.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-public class JwtAuthenticationController {
-    @Autowired
-    private AuthenticationManager authenticationManager;
+@RequestMapping("/api")
+public class JwtAuthenticationResource {
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtUserDetailsService userDetailsService;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    private final JwtUserDetailsService userDetailsService;
+
+    public JwtAuthenticationResource(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, JwtUserDetailsService userDetailsService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userDetailsService = userDetailsService;
+    }
+
+    @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());

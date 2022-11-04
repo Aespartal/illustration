@@ -8,13 +8,11 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import javax.servlet.http.HttpSession;
 
 import net.ausiasmarch.entity.FollowerEntity;
 import net.ausiasmarch.entity.FollowerId;
 import net.ausiasmarch.entity.RolEntity;
 import net.ausiasmarch.entity.dto.UserDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,52 +32,52 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/api")
+public class UserResource {
 
-    @Autowired
-    UserService oUserService;
-    
-    @Autowired
-    HttpSession oSession;
+    private final UserService oUserService;
 
-    @GetMapping("/{id}")
+    public UserResource(UserService oUserService) {
+        this.oUserService = oUserService;
+    }
+
+    @GetMapping("/user/{id}")
     public ResponseEntity<UserDTO> get(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>( oUserService.findOne(id), HttpStatus.OK);
     }
 
-    @GetMapping("/name/{username}")
+    @GetMapping("/user/name/{username}")
     public ResponseEntity<UserDTO> getUsername(@PathVariable(value = "username") String username) {
         Optional<UserDTO> userDTO = oUserService.getUsername(username);
         return new ResponseEntity(userDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/getall")
+    @GetMapping("/user/getall")
     public ResponseEntity<List<UserDTO>> get() {
         return new ResponseEntity<>(oUserService.findAll(), HttpStatus.OK);
     }
     
-     @GetMapping("/getuserschat/{user_id}")
+     @GetMapping("/user/getuserschat/{user_id}")
     public ResponseEntity<List<UserDTO>> getUsersChat(@PathVariable(value = "user_id") int user_id) {
         return new ResponseEntity<>(oUserService.getUsersChat(user_id), HttpStatus.OK);
     }
 
-    @GetMapping("/count")
+    @GetMapping("/user/count")
     public ResponseEntity<Long> count() {
         return new ResponseEntity<>(oUserService.count(), HttpStatus.OK);
     }
     
-    @GetMapping("/countfolloweds/{user_id}")
+    @GetMapping("/user/countfolloweds/{user_id}")
     public ResponseEntity<Integer> countFolloweds(@PathVariable(value = "user_id") int user_id) {
         return new ResponseEntity<>(oUserService.countFolloweds(user_id), HttpStatus.OK);
     }
 
-    @GetMapping("/countfollowers/{user_id}")
+    @GetMapping("/user/countfollowers/{user_id}")
     public ResponseEntity<Integer> countFollowers(@PathVariable(value = "user_id") int user_id) {
         return new ResponseEntity<>(oUserService.countFollowers(user_id), HttpStatus.OK);
     }
 
-    @GetMapping("/getpage/{page}/{rpp}")
+    @GetMapping("/user/getpage/{page}/{rpp}")
     public ResponseEntity<Page<UserDTO>> getPage(@PathVariable(value = "page") int page,
             @PathVariable(value = "rpp") int rpp) {
         Pageable oPageable;
@@ -87,7 +85,7 @@ public class UserController {
         return new ResponseEntity<>(oUserService.getPage(oPageable), HttpStatus.OK);
     }
     //Los que sigue al usuario
-    @GetMapping("/getfollowers/{page}/{rpp}/{id}")
+    @GetMapping("/user/getfollowers/{page}/{rpp}/{id}")
     public ResponseEntity<List<UserDTO>> getFolloweds(@PathVariable(value = "page") int page,
             @PathVariable(value = "rpp") int rpp,
             @PathVariable(value = "id") int user_id) {
@@ -95,8 +93,8 @@ public class UserController {
         oPageable = PageRequest.of(page, rpp);
         return new ResponseEntity<>(oUserService.getFolloweds(oPageable, user_id), HttpStatus.OK);
     }
-    //Los que el usuario sigue
-     @GetMapping("/getfolloweds/{page}/{rpp}/{id}")
+
+    @GetMapping("/user/getfolloweds/{page}/{rpp}/{id}")
     public ResponseEntity<List<UserDTO>> getfollowers(@PathVariable(value = "page") int page,
             @PathVariable(value = "rpp") int rpp,
             @PathVariable(value = "id") int user_id) {
@@ -105,42 +103,38 @@ public class UserController {
         return new ResponseEntity<>(oUserService.getFollowers(oPageable, user_id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/user/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable(value = "id") int id) {
         return new ResponseEntity<>(oUserService.delete(id), HttpStatus.OK);
     }
 
-    @PostMapping("/") // @RequestParam para uso parametro a parametro
+    @PostMapping("/user") // @RequestParam para uso parametro a parametro
     public ResponseEntity<UserDTO> create(@RequestBody UserEntity oUserBean) {
         return new ResponseEntity<>(oUserService.create(oUserBean), HttpStatus.OK);
     }
 
-    @PutMapping("/") // @RequestParam para uso parametro a parametro
+    @PutMapping("/user") // @RequestParam para uso parametro a parametro
     public ResponseEntity<UserDTO> update(@RequestBody UserEntity oUserBean) {
         return new ResponseEntity<>( oUserService.update(oUserBean), HttpStatus.OK);
     }
 
-    @GetMapping("/userbyimage/{image_id}")
+    @GetMapping("/user/userbyimage/{image_id}")
     public ResponseEntity<UserDTO> findUserByImage(@PathVariable(value = "image_id") Integer image_id) {
         Optional<UserDTO> userDTO = oUserService.findUserByImage(image_id);
         return new ResponseEntity(userDTO, HttpStatus.OK);
     }
 
-    @PostMapping("/follow")
+    @PostMapping("/user/follow")
     public ResponseEntity<FollowerEntity> follow(@RequestBody FollowerId mParametros) {
         Integer user_id = mParametros.getUser_id();
         Integer friend_id = mParametros.getFriend_id();
         return new ResponseEntity<>(oUserService.follow(user_id, friend_id), HttpStatus.OK);
     }
     
-    @GetMapping("/findfollow/{user_id}/{friend_id}")
+    @GetMapping("/user/findfollow/{user_id}/{friend_id}")
     public ResponseEntity<Boolean> findfollow(@PathVariable(value = "user_id") Integer user_id,
             @PathVariable(value = "friend_id") Integer friend_id) {
         return new ResponseEntity<>(oUserService.findFollow(user_id, friend_id), HttpStatus.OK);
-    }
-    
-     public UserEntity user() {
-        return (UserEntity) oSession.getAttribute("username");
     }
 
     @PostMapping("/fill/{number}")

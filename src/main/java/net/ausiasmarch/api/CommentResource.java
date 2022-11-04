@@ -7,15 +7,11 @@ package net.ausiasmarch.api;
 
 import java.util.Calendar;
 import java.util.List;
-import javax.servlet.http.HttpSession;
-import net.ausiasmarch.entity.CategoryEntity;
+
 import net.ausiasmarch.entity.CommentEntity;
 import net.ausiasmarch.entity.ImageEntity;
 import net.ausiasmarch.entity.UserEntity;
-import net.ausiasmarch.entity.interfaces.GenericEntityInterface;
-import net.ausiasmarch.service.implementation.specific.CategoryService;
 import net.ausiasmarch.service.implementation.specific.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,81 +29,64 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 @RestController
-@RequestMapping("/comment")
-public class CommentController {
+@RequestMapping("/api")
+public class CommentResource {
 
-    @Autowired
-    CommentService oCommentService;
+    private final CommentService commentService;
 
-    @Autowired
-    HttpSession oSession;
+    public CommentResource(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
-    @GetMapping("/{id}")
+    @GetMapping("/comment/{id}")
     public ResponseEntity<CommentEntity> get(@PathVariable(value = "id") int id) {
-        return new ResponseEntity<>((CommentEntity) oCommentService.get(id), HttpStatus.OK);
+        return new ResponseEntity<>((CommentEntity) commentService.get(id), HttpStatus.OK);
     }
 
-    @GetMapping("/getall")
+    @GetMapping("/comment/getall")
     public ResponseEntity<List<CommentEntity>> get() {
-        return new ResponseEntity<>(oCommentService.getall(), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.getall(), HttpStatus.OK);
     }
 
-    @GetMapping("/count")
+    @GetMapping("/comment/count")
     public ResponseEntity<Long> count() {
-        return new ResponseEntity<>(oCommentService.count(), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.count(), HttpStatus.OK);
     }
     
-     @GetMapping("/count/{id}")
+     @GetMapping("/comment/count/{id}")
     public ResponseEntity<Integer> count(@PathVariable(value = "id") int image_id) {
-        return new ResponseEntity<>(oCommentService.countComments(image_id), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.countComments(image_id), HttpStatus.OK);
     }
 
-    @GetMapping("/getpage/{page}/{rpp}")
+    @GetMapping("/comment/getpage/{page}/{rpp}")
     public ResponseEntity<Page<CommentEntity>> getPage(@PathVariable(value = "page") int page,
             @PathVariable(value = "rpp") int rpp) {
         Pageable oPageable;
         oPageable = PageRequest.of(page, rpp);
-        return new ResponseEntity<>(oCommentService.getPage(oPageable), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.getPage(oPageable), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/comment/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable(value = "id") int id) {
-     if (this.user() != null) {         
-        CommentEntity oComment = oCommentService.getCommentByUser_id(id, this.user().getId());
-        if(oComment != null || this.user().getRole().getId() == 1){
-            return new ResponseEntity<>(oCommentService.delete(id), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(false, HttpStatus.OK);
-        }     
-     } else {
-        return new ResponseEntity<>(false, HttpStatus.OK);
-     }
+        return new ResponseEntity<>(commentService.delete(id), HttpStatus.OK);
     }
 
-    @PostMapping("/") // @RequestParam para uso parametro a parametro
+    @PostMapping("/comment/")
     public ResponseEntity<?> create(@RequestBody CommentEntity oCommentEntity) {
-        if (this.user() != null) { 
-            return new ResponseEntity<>((CommentEntity) oCommentService.create(oCommentEntity), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(false, HttpStatus.OK);
-        }
+        return new ResponseEntity<>((CommentEntity) commentService.create(oCommentEntity), HttpStatus.OK);
     }
 
-    @PutMapping("/") // @RequestParam para uso parametro a parametro
+    @PutMapping("/comment")
     public ResponseEntity<CommentEntity> update(@RequestBody CommentEntity oCommentEntity) {
-        return new ResponseEntity<>((CommentEntity) oCommentService.update(oCommentEntity), HttpStatus.OK);
+        return new ResponseEntity<>((CommentEntity) commentService.update(oCommentEntity), HttpStatus.OK);
     }
 
-    @GetMapping("/getall/{id}")
+    @GetMapping("/comment/getall/{id}")
     public ResponseEntity<List<CommentEntity>> getcomments(@PathVariable(value = "id") Integer id) {
-        return new ResponseEntity<>(oCommentService.getcomments(id), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.getcomments(id), HttpStatus.OK);
     }
 
-    public UserEntity user() {
-        return (UserEntity) oSession.getAttribute("username");
-    }
-
-    @PostMapping("/fill/{number}")
+    @PostMapping("/comment/fill/{number}")
     public ResponseEntity<String>
             fill(@PathVariable(value = "number") int number) {
         String[] comentarios = {
@@ -139,7 +118,7 @@ public class CommentController {
             oCommentEntity.setImage_id(oImageEntity);
             oCommentEntity.setBody(body);
 
-            oCommentService.create(oCommentEntity);
+            commentService.create(oCommentEntity);
         }
         return new ResponseEntity<>("Se han añadido correctamente", HttpStatus.OK);
     }
